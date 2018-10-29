@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+
+<script>
+    function Validate(textbox) {
+
+        if (textbox.value == '' || textbox.validity.typeMismatch) {
+            textbox.setCustomValidity(textbox.title);
+        }
+        else {
+            textbox.setCustomValidity('');
+        }
+        return true;
+    }
+</script>
+<div class="row">
+    <div class="col-sm-4 col-sm-offset-4">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title"><strong>Sign In </strong></h3></div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    if (ViewBag.Result == false)
+                    {
+                        <div class="alert alert-danger">
+                            Your password is not accepted. Please try again.
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <label for="Username">Username</label>
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon"><i class="fa fa-user-o fa-fw"></i></span>
+                            <input type="text" class="form-control" value="@ViewBag.Username" name="Username" placeholder="Username" required="" autofocus="" title="Please enter your METU Login ID" oninput="Validate(this);" oninvalid="Validate(this);" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Password">Password</label>
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+                            <input type="password" class="form-control" name="Password" placeholder="Password" required="" title="Please enter your METU Password" oninput="Validate(this);" oninvalid="Validate(this);" />
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" name="Submit" value="Login" type="Submit">Login&nbsp;<i class="fa fa-sign-in"></i></button>
+                }
+            </div>
+        </div>
+    </div>
+</div>

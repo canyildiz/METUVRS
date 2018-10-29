@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Make a Sticker Application</h3>
+        <p>
+            You can make a sticker application for your vehicle, and pay the fee online.
+            Click apply below to proceed.
+        </p>
+        <p><a href="@Url.Action("Apply", "Sticker")" class="btn btn-default">Apply for Sticker&nbsp;<i class="fa fa-file-text-o"></i></a></p>
+    </div>
+    <div class="col-md-4">
+        <h3>Get a Temporary Access</h3>
+        <p>If you need to access to the campus for a limited time. You can make a temporary access application with the button below.</p>
+        <p><a href="@Url.Action("Apply", "Visitor")" class="btn btn-default">Apply for Access&nbsp;<i class="fa fa-ticket"></i></a></p>
+    </div>
+    <div class="col-md-4">
+        <h3>FAQ</h3>
+        <p>With the link below, you can get more information about vehicle registration and view the frequently asked questions. </p>
+        <p><a href="@Url.Action("FAQ", "Home")" class="btn btn-default">FAQ&nbsp;<i class="fa fa-info-circle"></i></a></p>
+    </div>
+</div>

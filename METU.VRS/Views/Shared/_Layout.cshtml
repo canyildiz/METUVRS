@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - METU VRS</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;subset=latin-ext" rel="stylesheet">
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/fontawesome")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        .header-menu .header-middle {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: 30px 0
+        }
+
+            .header-menu .header-middle img {
+                height: 60px;
+                width: auto
+            }
+
+            .header-menu .header-middle .department-name {
+                font-family: "roboto slab",serif;
+                font-size: 20px;
+                color: #55565a;
+                border-left: 1px solid #ddd;
+                padding-left: 20px;
+                margin-left: 10px
+            }
+
+        .navbar-inverse {
+            background-color: #141006;
+        }
+
+        footer p {
+            color: darkgray;
+            padding-top: 1em;
+        }
+
+        .metu-nav {
+            background-color: #e31837;
+            color: white
+        }
+
+            .metu-nav a, .metu-nav a:visited, .metu-nav a:link {
+                color: white
+            }
+
+            .metu-nav li a:hover, .metu-nav li a:focus {
+                background-color: #717073 !important;
+            }
+
+            .metu-nav .icon-bar {
+                background-color: white;
+            }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-inverse navbar-static-top hidden-xs">
+        <div class="container ">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="//www.metu.edu.tr">METU</a></li>
+                <li><a href="//ii.metu.edu.tr">Information Institute</a></li>
+            </ul>
+        </div>
+    </nav>
+    <header class="header-menu" id="logo-header">
+        <div class="container">
+            <div class="header-middle">
+                <a href="/"><img src="~/Content/images/metu.svg" /></a>
+                <span class="department-name">Vehicle Registration System</span>
+            </div>
+        </div>
+    </header>
+    <div class="navbar metu-nav">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("FAQ", "FAQ", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a href="/">@User.Identity.Name <i class="fa fa-user-o"></i></a></li>
+                        <li><a href="@Url.Action("Logout", "Home")">Logout <i class="fa fa-sign-out"></i></a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@Url.Action("Login", "Home")">Login <i class="fa fa-sign-in"></i></a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content col-xs-offset-1 col-xs-10">
+        @RenderBody()
+        <hr />
+        <footer class="navbar navbar-fixed-bottom navbar-default">
+            <div class="col-xs-offset-1 col-sm-offset-0 center-block text-center">
+                <p>Middle East Technical University - Universiteler Mahallesi, Dumlupinar Bulvari No:1, 06800 Cankaya/Ankara Turkey</p>
+            </div>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
