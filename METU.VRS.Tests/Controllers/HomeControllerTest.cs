@@ -1,4 +1,5 @@
 ﻿using METU.VRS.Controllers;
+using METU.VRS.Controllers.Static;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web.Mvc;
 
@@ -7,6 +8,12 @@ namespace METU.VRS.Tests.Controllers
     [TestClass]
     public class HomeControllerTest
     {
+        [TestInitialize]
+        public void Init()
+        {
+            University.Init();
+        }
+
         [TestMethod]
         public void Index()
         {
@@ -35,7 +42,7 @@ namespace METU.VRS.Tests.Controllers
         public void LoginSuccess()
         {
             HomeController controller = new HomeController();
-            ViewResult result = controller.Login("testuser", "password", "") as ViewResult;
+            ViewResult result = controller.Login("e100", "e100", "") as ViewResult;
             Assert.IsNotNull(result);
             Assert.IsTrue(result.ViewBag.Result);
         }
@@ -44,7 +51,7 @@ namespace METU.VRS.Tests.Controllers
         public void LoginFail()
         {
             HomeController controller = new HomeController();
-            ViewResult result = controller.Login("testuser", "fail", "") as ViewResult;
+            ViewResult result = controller.Login("e100", "fail", "") as ViewResult;
             Assert.IsNotNull(result);
             Assert.IsFalse(result.ViewBag.Result);
         }

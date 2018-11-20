@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using METU.VRS.Controllers.Static;
+using METU.VRS.UI;
+using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -17,6 +17,7 @@ namespace METU.VRS
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            University.Init();
         }
 
         public void Application_AuthenticateRequest(object sender, EventArgs e)
@@ -32,7 +33,7 @@ namespace METU.VRS
                     var decodedTicket = FormsAuthentication.Decrypt(cookie.Value);
                     if (decodedTicket != null && !decodedTicket.Expired)
                     {
-                        var principal = new System.Security.Principal.GenericPrincipal(new FormsIdentity(decodedTicket), new string[] { "user" });
+                        var principal = new METUPrincipal(decodedTicket);
                         HttpContext.Current.User = principal;
                     }
                 }

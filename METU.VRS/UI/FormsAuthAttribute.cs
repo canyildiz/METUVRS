@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
 
-namespace METU.VRS
+namespace METU.VRS.UI
 {
     public class FormsAuthAttribute : AuthorizeAttribute
     {

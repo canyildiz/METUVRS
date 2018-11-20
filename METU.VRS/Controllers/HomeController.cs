@@ -1,6 +1,5 @@
-﻿using METU.VRS.Abstract;
-using METU.VRS.Concrete;
-using METU.VRS.Models.Shared;
+﻿using METU.VRS.Controllers.Static;
+using METU.VRS.Models;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -36,7 +35,7 @@ namespace METU.VRS.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
-            ViewBag.UserName = "testuser";
+            ViewBag.UserName = "e100";
             return View();
         }
 
@@ -45,13 +44,12 @@ namespace METU.VRS.Controllers
         [HttpPost]
         public ActionResult Login(string Username, string Password, string returnUrl)
         {
-            ILoginProvider loginProvider = new DummyLoginProvider();
-            LoginResult result = loginProvider.Login(Username, Password);
-            if (result.Result)
+            User user = University.TryLogin(Username, Password);
+            if (user != null)
             {
                 if (HttpContext != null)
                 {
-                    FormsAuthentication.SetAuthCookie(Username, false);
+                    FormsAuthentication.SetAuthCookie(user.UID, false);
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);

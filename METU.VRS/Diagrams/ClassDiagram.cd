@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="METU.VRS.Models.ApplicationOwner">
+    <Position X="0.5" Y="6.5" Width="2.5" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApplicationOwner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="METU.VRS.Models.BranchAffiliate">
+    <Position X="10.25" Y="0.5" Width="1.5" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAQAAAAAAAAAAQAAAAAAEAA=</HashCode>
+      <FileName>Models\BranchAffiliate.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Type" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="METU.VRS.Models.Payment">
+    <Position X="3.75" Y="3.5" Width="2.25" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAAAAEAABAAA=</HashCode>
+      <FileName>Models\Payment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="METU.VRS.Models.Quota">
+    <Position X="9.5" Y="3.5" Width="1.75" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAgAAAAIAAAAAAABAAAAAAEQAAAAAAEAA=</HashCode>
+      <FileName>Models\Quota.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Division" />
+      <Property Name="Term" />
+      <Property Name="Type" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="METU.VRS.Models.Sticker">
+    <Position X="4" Y="9.75" Width="1.75" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Sticker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="METU.VRS.Models.StickerApplication">
+    <Position X="4.25" Y="6.5" Width="2" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+      <Property Name="SelectedType" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAABAATEAAAAgAAABIAAAAACBAAAAAAAEQIhAAAAAAA=</HashCode>
+      <FileName>Models\StickerApplication.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Status" />
+      <Property Name="Type" />
+      <Property Name="Vehicle" />
+      <Property Name="Term" />
+      <Property Name="Quota" />
+      <Property Name="User" />
+      <Property Name="Owner" />
+      <Property Name="Sticker" />
+      <Property Name="Payment" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="METU.VRS.Models.StickerTerm">
+    <Position X="1" Y="3.25" Width="1.75" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAgAAAAAAAAAAgAAAAAAAAAQAAAEAAAAA=</HashCode>
+      <FileName>Models\StickerTerm.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Type" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="METU.VRS.Models.StickerType">
+    <Position X="7" Y="9.5" Width="1.75" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAggAAAAAIAAAAAAAAAAAAACAAAgAAAAAA=</HashCode>
+      <FileName>Models\StickerType.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Class" />
+      <Property Name="TermType" />
+      <Property Name="UserCategory" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="METU.VRS.Models.User">
+    <Position X="7" Y="3.5" Width="1.5" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAQAAhAAAAAAAAAAAAAAGAA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Category" />
+      <Property Name="Division" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Roles" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="METU.VRS.Models.UserCategory">
+    <Position X="10.25" Y="9.25" Width="3" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAggAAAAAAAAAAAAAAAACEAAAAAAAAAEAA=</HashCode>
+      <FileName>Models\UserCategory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="METU.VRS.Models.UserRole">
+    <Position X="7" Y="0.5" Width="1.75" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAggAAAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Models\UserRole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="METU.VRS.Models.Vehicle">
+    <Position X="7.75" Y="6.5" Width="2.25" />
+    <Members>
+      <Property Name="ID" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAwAAAEAAAQAAAAAAAAA=</HashCode>
+      <FileName>Models\Vehicle.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Type" />
+    </ShowAsAssociation>
+  </Class>
+  <Enum Name="METU.VRS.Models.BranchAffiliateTypes">
+    <Position X="13.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAIAgAAAAAAAAAQAA=</HashCode>
+      <FileName>Models\BranchAffiliate.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="METU.VRS.Models.StickerApplicationStatus">
+    <Position X="0.75" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAhAEQAAAlAAgA=</HashCode>
+      <FileName>Models\StickerApplication.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="METU.VRS.Models.TermTypes">
+    <Position X="4" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAIAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Models\StickerTerm.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="METU.VRS.Models.StickerClasses">
+    <Position X="7" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACEAQABAAAAAAAAAAAAAACAAABAEAAAAAAAAAAA=</HashCode>
+      <FileName>Models\StickerType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="METU.VRS.Models.VehicleType">
+    <Position X="11.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAESAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Vehicle.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

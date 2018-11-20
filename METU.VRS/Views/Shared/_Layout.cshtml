@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using METU.VRS.UI
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -95,7 +97,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a href="/">@User.Identity.Name <i class="fa fa-user-o"></i></a></li>
+                        <li><a href="/">@(((METUPrincipal)User).User.Name) <i class="fa fa-user-o"></i></a></li>
                         <li><a href="@Url.Action("Logout", "Home")">Logout <i class="fa fa-sign-out"></i></a></li>
                     }
                     else

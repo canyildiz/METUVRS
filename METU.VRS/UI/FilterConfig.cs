@@ -1,7 +1,6 @@
-﻿using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
-namespace METU.VRS
+namespace METU.VRS.UI
 {
     public class FilterConfig
     {
