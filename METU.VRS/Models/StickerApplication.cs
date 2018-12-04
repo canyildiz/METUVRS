@@ -1,6 +1,10 @@
-﻿using System;
+﻿using METU.VRS.Controllers.Static;
+using METU.VRS.Models.CT;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace METU.VRS.Models
 {
@@ -25,7 +29,6 @@ namespace METU.VRS.Models
 
 
         private string _selectedType = null;
-
         [NotMapped]
         [Display(Name = "Sticker Type")]
         public string SelectedType
@@ -35,20 +38,25 @@ namespace METU.VRS.Models
         }
 
         [NotMapped]
-        public StickerType Type
-        {
-            get
-            {
-                return Quota.Type;
-            }
-        }
+        public StickerType Type => Quota.Type;
 
         [NotMapped]
-        public StickerTerm Term
+        public StickerTerm Term => Quota.Term;
+
+        public List<ApprovementOption> GetApprovementOptions()
         {
-            get
+            if (Status != StickerApplicationStatus.WaitingForApproval)
             {
-                return Quota.Term;
+                return null;
+            }
+            else
+            {
+                var quotas = University.GetQuotasForUser(User);
+                return quotas.Select(q => new ApprovementOption {
+                    Description = q.Type.Description,
+                    QuotaID = q.ID,
+                    Remaining = q.RemainingQuota
+                }).ToList();
             }
         }
 

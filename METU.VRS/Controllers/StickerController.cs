@@ -29,7 +29,7 @@ namespace METU.VRS.Controllers
             {
                 List<StickerApplication> applications = db.StickerApplications
                     .Include(s => s.Vehicle)
-                    .Include(s => s.Quota)
+                    .Include(s => s.Quota.Type)
                     .Include(s => s.Owner)
                     .Where(s => s.User.UID == ((METUPrincipal)User).User.UID)
                     .OrderByDescending(s => s.LastModified)
@@ -93,20 +93,6 @@ namespace METU.VRS.Controllers
             }
         }
 
-        [HttpGet]
-        [Authorize(Roles = "approval_user")]
-        public ActionResult Approve()
-        {
-            Trace.WriteLine("GET /Sticker/Approve");
-            using (DatabaseContext db = GetNewDBContext())
-            {
-                List<StickerApplication> applications = db.StickerApplications
-                    .Where(a => a.Status == StickerApplicationStatus.WaitingForApproval)
-                    .OrderByDescending(a => a.LastModified)
-                    .ToList();
-
-                return View(applications);
-            }
-        }
+  
     }
 }

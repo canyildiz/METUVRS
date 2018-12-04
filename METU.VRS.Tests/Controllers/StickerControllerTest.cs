@@ -7,28 +7,14 @@ using Moq;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace METU.VRS.Tests.Controllers
 {
     [TestClass]
-    public class StickerControllerTest
+    public class StickerControllerTest : ControllerTestBase
     {
-        [AssemblyInitialize]
-        public static void AssemblyInit(TestContext context)
-        {
-            Migrations.TestDatabase.InitTestDatase();
-            University.Init();
-        }
-
-        [TestInitialize]
-        public void Init()
-        {
-
-        }
-
         [TestMethod]
         public void IndexWithDataTest()
         {
@@ -101,43 +87,6 @@ namespace METU.VRS.Tests.Controllers
             List<StickerApplication> model = indexResult.Model as List<StickerApplication>;
             Assert.AreNotEqual(0, model.Count);
             Assert.AreEqual("06ZZ1234", model.FirstOrDefault().Vehicle.PlateNumber);
-        }
-
-        [TestMethod]
-        public void ApproveGetList()
-        {
-            var mockApproveUser = University.GetUser("o101");
-
-            StickerController controller = new StickerController();
-            controller.ControllerContext = new ControllerContext(MockAuthContext(mockApproveUser).Object, new RouteData(), controller);
-
-            ViewResult result = controller.Approve() as ViewResult;
-            Assert.IsNotNull(result);
-            Assert.AreNotEqual(0, ((List<StickerApplication>)result.Model).Count);
-            Assert.AreEqual(0, ((List<StickerApplication>)result.Model).Where(a => a.Status != StickerApplicationStatus.WaitingForApproval).Count());
-        }
-
-        [TestMethod]
-        public void TestDBConnection()
-        {
-            using (DatabaseContext db = new DatabaseContext())
-            {
-                List<StickerApplication> applications = db.StickerApplications
-                    .OrderByDescending(a => a.LastModified)
-                    .ToList();
-                Assert.AreNotEqual(0, applications.Count);
-            }
-        }
-        private Mock<HttpContextBase> MockAuthContext(User mockUser)
-        {
-            var httpreq = new Mock<HttpRequestBase>();
-            var httpctx = new Mock<HttpContextBase>();
-            var authUser = new Mock<METU.VRS.UI.METUPrincipal>();
-            authUser.Setup(u => u.User).Returns(mockUser);
-
-            httpctx.Setup(ctx => ctx.Request).Returns(httpreq.Object);
-            httpctx.Setup(ctx => ctx.User).Returns(authUser.Object);
-            return httpctx;
         }
     }
 }

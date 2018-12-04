@@ -98,6 +98,38 @@ namespace METU.VRS.Controllers.Static
             }
         }
 
+        public static Quota GetQuota(int Id)
+        {
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                return db.Quotas.AsNoTracking()
+                    .Include(q => q.Term)
+                    .Include(q => q.Type)
+                    .Where(q => q.ID == Id)
+                    .FirstOrDefault();
+            }
+        }
+
+        public static List<Quota> GetQuotasForUser(User user)
+        {
+            BranchAffiliate division = user.Division;
+
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                List<Quota> ret = new List<Quota>();
+                foreach (var type in GetStickerTypes(user.Category))
+                {
+                    StickerTerm term = GetOngoingTerm(type.TermType);
+                    ret.AddRange(db.Quotas.AsNoTracking()
+                        .Include(q => q.Term)
+                        .Include(q => q.Type)
+                        .Where(q => q.Term.ID == term.ID && q.Type.ID == type.ID && (q.Division == null || q.Division.UID == division.UID))
+                        .ToList());
+                }
+                return ret.ToList();
+            }
+        }
+
         public static User GetUser(string UID)
         {
             if (userCache.ContainsKey(UID))
