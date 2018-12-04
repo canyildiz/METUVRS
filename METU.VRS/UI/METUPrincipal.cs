@@ -1,4 +1,5 @@
-﻿using METU.VRS.Models;
+﻿using METU.VRS.Controllers.Static;
+using METU.VRS.Models;
 using METU.VRS.Services;
 using System.Data.Entity;
 using System.Linq;
@@ -20,17 +21,7 @@ namespace METU.VRS.UI
         public METUPrincipal(FormsAuthenticationTicket ticket)
         {
             formsIdentity = new FormsIdentity(ticket);
-            using (DatabaseContext db = new DatabaseContext())
-            {
-                User = db.Users
-                    .Include(u => u.Category)
-                    .Include(u => u.Division)
-                    .Include(u => u.Roles)
-                    .Where(u => u.UID == formsIdentity.Name)
-                    .AsNoTracking()
-                    .FirstOrDefault();
-            }
-
+            User = University.GetUser(formsIdentity.Name);
         }
 
         public virtual User User { get; }

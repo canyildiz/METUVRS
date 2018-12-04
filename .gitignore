@@ -333,5 +333,6 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
-Migrations
+**/Migrations/Configuration.cs
+**/Migrations/2018*.*
 *.dgml
