@@ -61,10 +61,10 @@ else
                 </td>
                 <td>
                     @Html.ActionLink("Details", "Details", new { id = item.ID })
-                    @if (item.Term.IsExpired())
+                    @*@if (item.Term.IsExpired())
                     {
                         Html.ActionLink("| Renew", "Renew", new { id = item.ID });
-                    }
+                    }*@
                 </td>
             </tr>
         }

@@ -1,5 +1,4 @@
-﻿using METU.VRS.Controllers.Static;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -25,24 +24,35 @@ namespace METU.VRS.Models
         public DateTime LastModified { get; set; }
 
 
+        private string _selectedType = null;
+
         [NotMapped]
         [Display(Name = "Sticker Type")]
         public string SelectedType
         {
+            get => Quota?.Type == null ? _selectedType : Type.ID.ToString();
+            set => _selectedType = value;
+        }
+
+        [NotMapped]
+        public StickerType Type
+        {
             get
             {
-                return Type?.ID.ToString();
-            }
-            set
-            {
-                Type = University.GetStickerType(value);
+                return Quota.Type;
             }
         }
 
+        [NotMapped]
+        public StickerTerm Term
+        {
+            get
+            {
+                return Quota.Term;
+            }
+        }
 
-        public virtual StickerType Type { get; set; }
         public virtual Vehicle Vehicle { get; set; } = new Vehicle();
-        public virtual StickerTerm Term { get; set; }
         public virtual Quota Quota { get; set; }
         public virtual User User { get; set; }
         public virtual ApplicationOwner Owner { get; set; }
@@ -54,9 +64,10 @@ namespace METU.VRS.Models
     {
         NotSet = 0,
         WaitingForApproval = 10,
-        WaitingForDelivery = 20,
-        Active = 30,
-        Expired = 40,
+        WaitingForPayment = 20,
+        WaitingForDelivery = 30,
+        Active = 40,
+        Expired = 50,
         NotApproved = 110,
         NotDelivered = 120,
         Invalidated = 130,

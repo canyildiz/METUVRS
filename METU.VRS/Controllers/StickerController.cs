@@ -27,11 +27,9 @@ namespace METU.VRS.Controllers
             Trace.WriteLine("GET /Sticker/Index");
             using (DatabaseContext db = GetNewDBContext())
             {
-
                 List<StickerApplication> applications = db.StickerApplications
-                    .Include(s => s.Term)
                     .Include(s => s.Vehicle)
-                    .Include(s => s.Type)
+                    .Include(s => s.Quota)
                     .Include(s => s.Owner)
                     .Where(s => s.User.UID == ((METUPrincipal)User).User.UID)
                     .OrderByDescending(s => s.LastModified)
@@ -63,30 +61,26 @@ namespace METU.VRS.Controllers
 
             if (ModelState.IsValid)
             {
-                application.ApproveDate = null;
-                application.CreateDate = DateTime.Now;
-                application.DeliveryDate = null;
-                application.LastModified = DateTime.Now;
-
-                application.Status = StickerApplicationStatus.WaitingForApproval;
-                application.Owner = new ApplicationOwner() { Name = ((METUPrincipal)User).User.Name };
-                application.Payment = null;
-                application.Sticker = null;
-
                 using (DatabaseContext db = GetNewDBContext())
                 {
-                    User user = db.Users
-                        .Include(u => u.Division)
-                        .Where(u => u.UID == ((METUPrincipal)User)
-                        .User.UID).FirstOrDefault();
+                    application.ApproveDate = null;
+                    application.CreateDate = DateTime.Now;
+                    application.DeliveryDate = null;
+                    application.LastModified = DateTime.Now;
 
-                    StickerTerm term = University.GetOngoingTerm(application.Type.TermType);
-                    Quota quota = University.GetQuotaForTerm(term, user.Division);
+                    application.Status = StickerApplicationStatus.WaitingForApproval;
+                    application.Payment = null;
+                    application.Sticker = null;
+
+                    User user = University.GetUser(((METUPrincipal)User).User.UID);
+                    Quota quota = University.GetQuotaForUser(user, University.GetStickerType(application.SelectedType));
 
                     application.User = user;
                     application.Quota = quota;
-                    application.Term = term;
 
+                    application.Owner = new ApplicationOwner() { Name = user.Name };
+                    db.Users.Attach(user);
+                    db.Quotas.Attach(quota);
                     db.StickerApplications.Add(application);
                     db.SaveChanges();
                 }
@@ -96,6 +90,22 @@ namespace METU.VRS.Controllers
             else
             {
                 return View();
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "approval_user")]
+        public ActionResult Approve()
+        {
+            Trace.WriteLine("GET /Sticker/Approve");
+            using (DatabaseContext db = GetNewDBContext())
+            {
+                List<StickerApplication> applications = db.StickerApplications
+                    .Where(a => a.Status == StickerApplicationStatus.WaitingForApproval)
+                    .OrderByDescending(a => a.LastModified)
+                    .ToList();
+
+                return View(applications);
             }
         }
     }
