@@ -167,11 +167,6 @@
   <ItemGroup>
     <Compile Include="Controllers\ApproveController.cs" />
     <Compile Include="Controllers\Base\ControllerBase.cs" />
-    <Compile Include="Migrations\201812042146525_Init.cs" />
-    <Compile Include="Migrations\201812042146525_Init.Designer.cs">
-      <DependentUpon>201812042146525_Init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\ConfigurationDefault.cs" />
     <Compile Include="Migrations\TestDatabase.cs" />
     <Compile Include="Models\CT\ApprovementOption.cs" />
@@ -204,6 +199,7 @@
     <Compile Include="Services\DummyLDAPProvider.cs" />
     <Compile Include="Services\LDAPResult.cs" />
     <Compile Include="UI\METUPrincipal.cs" />
+    <Compile Include="UI\Util.cs" />
     <Compile Include="UI\WebSessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +261,7 @@
     <Content Include="Views\Sticker\Index.cshtml" />
     <Content Include="Views\Visitor\Index.cshtml" />
     <Content Include="Views\Approve\Index.cshtml" />
+    <Content Include="Views\Sticker\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -278,11 +275,6 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201812042146525_Init.resx">
-      <DependentUpon>201812042146525_Init.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

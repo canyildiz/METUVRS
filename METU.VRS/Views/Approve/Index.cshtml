@@ -41,7 +41,8 @@
         <th>
             Sticker Type
         </th>
-        <th></th>
+        <th style="width:30px;"></th>
+        <th style="width:30px;"></th>
     </tr>
 
     @foreach (var item in Model)
@@ -60,11 +61,14 @@
                 @Html.DisplayFor(modelItem => item.Type.Description)
             </td>
             <td>
+                <a href="@Url.Action("Detail", "Sticker", new { id = item.ID })" data-toggle="modal" data-target="#details" class="btn btn-default">Detail&nbsp;<i class="fa fa-file-text-o"></i></a>&nbsp;
+            </td>
+            <td>
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Action <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                         <li class="dropdown-header"><i class="fa fa-check-circle"></i> Approve Application </li>
                         @foreach (var action in item.GetApprovementOptions())
                         {
@@ -84,3 +88,22 @@
 
     @Html.PagedListPager(Model, page => Url.Action("Index",
         new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+    <!-- Modal -->
+    <div class="modal fade" id="details" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    @section scripts{
+        <script>
+            $('#details').on('shown.bs.modal', function () {
+                $(this).scrollTop(0);
+            });
+
+            $('#details').on('hide.bs.modal', function () {
+                $('#details').removeData('bs.modal');
+            });
+        </script>
+    }

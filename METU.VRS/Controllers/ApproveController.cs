@@ -148,12 +148,12 @@ namespace METU.VRS.Controllers
 
                 if (application == null)
                 {
-                    throw new HttpAntiForgeryException("Application not found");
+                    return new HttpNotFoundResult();
                 }
 
                 if (application.User.Division.ID != ((METUPrincipal)User).User.Division.ID)
                 {
-                    throw new HttpAntiForgeryException();
+                    return new HttpUnauthorizedResult();
                 }
 
                 application.Status = StickerApplicationStatus.NotApproved;

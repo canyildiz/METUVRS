@@ -88,5 +88,53 @@ namespace METU.VRS.Tests.Controllers
             Assert.AreNotEqual(0, model.Count);
             Assert.AreEqual("06ZZ1234", model.FirstOrDefault().Vehicle.PlateNumber);
         }
+
+        [TestMethod]
+        public void Detail()
+        {
+            var mockUser = University.GetUser("e100");
+
+            StickerController controller = new StickerController();
+            controller.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), controller);
+
+            ViewResult result = controller.Detail(1) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result.Model, typeof(StickerApplication));
+
+            StickerApplication model = result.Model as StickerApplication;
+            Assert.AreEqual(1, model.ID);
+        }
+
+        [TestMethod]
+        public void DetailNotAllowed()
+        {
+            var mockUser = University.GetUser("e100");
+
+            StickerController controller = new StickerController();
+            controller.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), controller);
+
+            ActionResult result = controller.Detail(2);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(HttpUnauthorizedResult));
+        }
+
+        [TestMethod]
+        public void DetailwithApprovalUser()
+        {
+            var mockUser = University.GetUser("o101");
+
+            StickerController controller = new StickerController();
+            controller.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), controller);
+
+            ViewResult result = controller.Detail(1) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result.Model, typeof(StickerApplication));
+
+            StickerApplication model = result.Model as StickerApplication;
+            Assert.AreEqual(1, model.ID);
+        }
     }
 }

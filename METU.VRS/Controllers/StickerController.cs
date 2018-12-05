@@ -93,6 +93,43 @@ namespace METU.VRS.Controllers
             }
         }
 
-  
+
+        [HttpGet]
+        public ActionResult Detail(int Id)
+        {
+            Trace.WriteLine("GET /Sticker/Detail");
+            using (DatabaseContext db = GetNewDBContext())
+            {
+                var application = db.StickerApplications
+                    .Include(a => a.Owner)
+                    .Include(a => a.Payment)
+                    .Include(a => a.Quota.Term)
+                    .Include(a => a.Quota.Type)
+                    .Include(a => a.Sticker)
+                    .Include(a => a.User.Division)
+                    .Include(a => a.User.Category)
+                    .Include(a => a.Vehicle)
+                    .Where(a => a.ID == Id)
+                    .FirstOrDefault();
+
+                if (application == null)
+                {
+                    return new HttpNotFoundResult();
+                }
+
+                if (!(User.IsInRole("delivery_user") || User.IsInRole("approval_user")) &&
+                    application.User.ID != ((METUPrincipal)User).User.ID)
+                {
+                    return new HttpUnauthorizedResult();
+                }
+                else if (User.IsInRole("approval_user") && application.User.Division.ID != ((METUPrincipal)User).User.Division.ID)
+                {
+                    return new HttpUnauthorizedResult();
+                }
+
+                return View(application);
+            }
+
+        }
     }
 }
