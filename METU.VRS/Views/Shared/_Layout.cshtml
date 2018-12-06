@@ -115,6 +115,9 @@
                                     @if (User.IsInRole("approval_user"))
                                     {
                                         <li><a href="@Url.Action("Index", "Approve")">Approve Applications <i class="fa fa-check-circle"></i></a></li>
+                                    }else if (User.IsInRole("delivery_user"))
+                                    {
+                                        <li><a href="@Url.Action("Index", "Deliver")">Deliver Stickers <i class="fa fa-file-text-o"></i></a></li>
                                     }
                                 </ul>
                             </li>

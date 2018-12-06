@@ -31,6 +31,7 @@ namespace METU.VRS.Controllers
                     .Include(s => s.Vehicle)
                     .Include(s => s.Quota.Type)
                     .Include(s => s.Owner)
+                    .Include(s => s.Sticker)
                     .Where(s => s.User.UID == ((METUPrincipal)User).User.UID)
                     .OrderByDescending(s => s.LastModified)
                     .ToList();
