@@ -1,5 +1,7 @@
 ﻿@using METU.VRS.UI
-
+@{
+    var user = User.Identity.IsAuthenticated ? ((METUPrincipal)User).User : null;
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,6 +62,16 @@
             .metu-nav .icon-bar {
                 background-color: white;
             }
+
+            .metu-nav .dropdown-menu > li > a {
+                color: #333;
+            }
+
+                .metu-nav .dropdown-menu > li > a:hover, .metu-nav .dropdown-menu > li > a:focus {
+                    color: #262626;
+                    text-decoration: none;
+                    background-color: #f5f5f5 !important;
+                }
     </style>
 </head>
 <body>
@@ -93,12 +105,32 @@
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("FAQ", "FAQ", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("approval_user") || User.IsInRole("delivery_user"))
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrator Menu <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    @if (User.IsInRole("approval_user"))
+                                    {
+                                        <li><a href="@Url.Action("Index", "Approve")">Approve Applications <i class="fa fa-check-circle"></i></a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a href="/">@(((METUPrincipal)User).User.Name) <i class="fa fa-user-o"></i></a></li>
-                        <li><a href="@Url.Action("Logout", "Home")">Logout <i class="fa fa-sign-out"></i></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@(user.Name)@@@(user.Division.UID) <i class="fa fa-user-o"></i> <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="@Url.Action("Logout", "Home")">Logout <i class="fa fa-sign-out"></i></a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/"></a></li>
                     }
                     else
                     {

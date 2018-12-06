@@ -1,6 +1,11 @@
-﻿using System;
+﻿using METU.VRS.Controllers.Static;
+using METU.VRS.Models.CT;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace METU.VRS.Models
 {
@@ -25,7 +30,6 @@ namespace METU.VRS.Models
 
 
         private string _selectedType = null;
-
         [NotMapped]
         [Display(Name = "Sticker Type")]
         public string SelectedType
@@ -35,20 +39,26 @@ namespace METU.VRS.Models
         }
 
         [NotMapped]
-        public StickerType Type
-        {
-            get
-            {
-                return Quota.Type;
-            }
-        }
+        public StickerType Type => Quota.Type;
 
         [NotMapped]
-        public StickerTerm Term
+        public StickerTerm Term => Quota.Term;
+
+        public List<ApprovementOption> GetApprovementOptions()
         {
-            get
+            if (Status != StickerApplicationStatus.WaitingForApproval)
             {
-                return Quota.Term;
+                return null;
+            }
+            else
+            {
+                var quotas = University.GetQuotasForUser(User);
+                return quotas.Select(q => new ApprovementOption
+                {
+                    Description = q.Type.Description,
+                    QuotaID = q.ID,
+                    Remaining = q.RemainingQuota
+                }).ToList();
             }
         }
 
@@ -62,15 +72,15 @@ namespace METU.VRS.Models
 
     public enum StickerApplicationStatus
     {
-        NotSet = 0,
-        WaitingForApproval = 10,
-        WaitingForPayment = 20,
-        WaitingForDelivery = 30,
-        Active = 40,
-        Expired = 50,
-        NotApproved = 110,
-        NotDelivered = 120,
-        Invalidated = 130,
-        Aborted = 140
+        [Description("Not Set")] NotSet = 0,
+        [Description("Waiting For Approval")] WaitingForApproval = 10,
+        [Description("Waiting For Payment")] WaitingForPayment = 20,
+        [Description("Waiting For Delivery")] WaitingForDelivery = 30,
+        [Description("Active")] Active = 40,
+        [Description("Expired")] Expired = 50,
+        [Description("Not Approved")] NotApproved = 110,
+        [Description("Not Delivered")] NotDelivered = 120,
+        [Description("Invalidated")] Invalidated = 130,
+        [Description("Aborted")] Aborted = 140
     }
 }

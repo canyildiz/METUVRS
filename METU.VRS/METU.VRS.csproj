@@ -61,6 +61,12 @@
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.14.2.11, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.14.2\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -159,13 +165,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ApproveController.cs" />
     <Compile Include="Controllers\Base\ControllerBase.cs" />
-    <Compile Include="Migrations\201812040015427_Init.cs" />
-    <Compile Include="Migrations\201812040015427_Init.Designer.cs">
-      <DependentUpon>201812040015427_Init.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\ConfigurationDefault.cs" />
     <Compile Include="Migrations\TestDatabase.cs" />
+    <Compile Include="Models\CT\ApprovementOption.cs" />
     <Compile Include="UI\FormsAuthAttribute.cs" />
     <Compile Include="Models\ApplicationOwner.cs" />
     <Compile Include="Models\Payment.cs" />
@@ -195,6 +199,7 @@
     <Compile Include="Services\DummyLDAPProvider.cs" />
     <Compile Include="Services\LDAPResult.cs" />
     <Compile Include="UI\METUPrincipal.cs" />
+    <Compile Include="UI\Util.cs" />
     <Compile Include="UI\WebSessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +211,7 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\metu.svg" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -254,6 +260,8 @@
     <Content Include="Views\Visitor\Apply.cshtml" />
     <Content Include="Views\Sticker\Index.cshtml" />
     <Content Include="Views\Visitor\Index.cshtml" />
+    <Content Include="Views\Approve\Index.cshtml" />
+    <Content Include="Views\Sticker\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -267,12 +275,6 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201812040015427_Init.resx">
-      <DependentUpon>201812040015427_Init.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

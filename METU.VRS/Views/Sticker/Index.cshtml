@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<METU.VRS.Models.StickerApplication>
-
+@using METU.VRS.UI
+@using METU.VRS.Models
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 
 @if (Model.Count() == 0)
 {
@@ -57,18 +57,40 @@ else
                     @Html.DisplayFor(modelItem => item.LastModified)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @item.Status.ToDescription()
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.ID })
-                    @*@if (item.Term.IsExpired())
+                    <a href="@Url.Action("Detail", "Sticker", new { id = item.ID })" data-toggle="modal" data-target="#details" class="btn btn-default">Detail&nbsp;<i class="fa fa-file-text-o"></i></a>&nbsp;
+                    @if (item.Term != null && item.Term.IsExpired())
                     {
-                        Html.ActionLink("| Renew", "Renew", new { id = item.ID });
-                    }*@
+                        <a href="@Url.Action("Renew", "Sticker")" class="btn btn-default">Renew&nbsp;<i class="fa fa-refresh"></i></a>
+                    }
+                    else if (item.Status == StickerApplicationStatus.WaitingForPayment)
+                    {
+                        <a href="@Url.Action("Pay", "Sticker")" class="btn btn-default">Pay&nbsp;<i class="fa fa-credit-card-alt"></i></a>
+                    }
                 </td>
             </tr>
         }
     </table>
     <p><a href="@Url.Action("Apply", "Sticker")" class="btn btn-default">Apply for an additional sticker&nbsp;<i class="fa fa-file-text-o"></i></a></p>
 
+    <!-- Modal -->
+    <div class="modal fade" id="details" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    @section scripts{
+        <script>
+            $('#details').on('shown.bs.modal', function () {
+                $(this).scrollTop(0);
+            });
+
+            $('#details').on('hide.bs.modal', function () {
+                $('#details').removeData('bs.modal');
+            });
+        </script>
+    }
 }
