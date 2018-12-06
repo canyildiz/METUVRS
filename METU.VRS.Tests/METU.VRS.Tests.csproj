@@ -122,8 +122,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\DeliverControllerTest.cs" />
     <Compile Include="Controllers\ApproveControllerTest.cs" />
-    <Compile Include="Controllers\ControllerTestBase.cs" />
+    <Compile Include="Controllers\Base\ControllerTestBase.cs" />
     <Compile Include="Controllers\StickerControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
@@ -132,7 +133,6 @@
     <Content Include="App.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Content\PagedList.css" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

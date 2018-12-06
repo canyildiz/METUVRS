@@ -1,13 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace METU.VRS.Models
 {
     public class Sticker
     {
-        [ForeignKey("Application")]
-        public int ID { get; set; }
+        [Key]
+        public int FID { get; set; }
+
         public int SerialNumber { get; set; }
 
+        [Required]
         public virtual StickerApplication Application { get; set; }
     }
 }

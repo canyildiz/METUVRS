@@ -9,7 +9,7 @@ namespace METU.VRS.Models
         public int ID { get; set; }
         public string UID { get; set; }
         public int TotalQuota { get; set; }
-        public decimal StickerFee { get; set; }
+        public int StickerFee { get; set; }
 
         [NotMapped]
         public int RemainingQuota

@@ -6,14 +6,15 @@ namespace METU.VRS.Models
 {
     public class Payment
     {
-        [ForeignKey("Application")]
-        public int ID { get; set; }
+        [Key]
+        public int FID { get; set; }
 
         [Display(Name = "Payment Amount")]
         public int Amount { get; set; }
         public string TransactionNumber { get; set; }
         public DateTime TransactionDate { get; set; }
 
+        [Required]
         public virtual StickerApplication Application { get; set; }
     }
 }

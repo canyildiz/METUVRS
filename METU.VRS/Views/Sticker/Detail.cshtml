@@ -34,7 +34,7 @@
             </caption>
             <tr>
                 <td>@Html.LabelFor(m => m.Owner.Name)</td>
-                <td>@Model.Owner.Name</td>
+                <td>@Model.Owner.Name (@Model.User.UID)</td>
             </tr>
             <tr>
                 <td>@Html.LabelFor(m => m.User.Division.Name)</td>
@@ -56,7 +56,7 @@
                 <td colspan="2">&nbsp;</td>
             </tr>
             <tr>
-                <td>@Html.LabelFor(m => m.Payment.Amount)</td>
+                <td>@Html.LabelFor(m => m.Payment.Amount) (TL)</td>
                 <td>@Maybe(@Model.Payment?.Amount, "Not Paid Yet")</td>
             </tr>
             <tr>
@@ -78,7 +78,7 @@
             </tr>
             <tr>
                 <td>@Html.LabelFor(m => m.Sticker.SerialNumber)</td>
-                <td>@Maybe(@Model.Sticker?.SerialNumber, "N/A")</td>
+                <td>@Maybe(@Model.Sticker?.SerialNumber, "Not Delivered")</td>
             </tr>
             <tr>
                 <td colspan="2">&nbsp;</td>

@@ -130,9 +130,12 @@
             Vehicle ve100 = new Vehicle { OwnerName = e100.Name, PlateNumber = "06AA100", RegistrationNumber = "AA100000", Type = VehicleType.Car };
             Vehicle ve200 = new Vehicle { OwnerName = e200.Name, PlateNumber = "06AA200", RegistrationNumber = "AA200000", Type = VehicleType.Car };
             Vehicle ve101 = new Vehicle { OwnerName = e101.Name, PlateNumber = "06AA101", RegistrationNumber = "AA101000", Type = VehicleType.Car };
+            Vehicle ve102 = new Vehicle { OwnerName = e102.Name, PlateNumber = "06AA102", RegistrationNumber = "AA102000", Type = VehicleType.Car };
             Vehicle ve201 = new Vehicle { OwnerName = e201.Name, PlateNumber = "06AA201", RegistrationNumber = "AA201000", Type = VehicleType.Car };
+            Vehicle ve202 = new Vehicle { OwnerName = e202.Name, PlateNumber = "06AA202", RegistrationNumber = "AA202000", Type = VehicleType.Car };
 
-            context.Vehicles.AddOrUpdate(v => v.ID, new Vehicle[] { ve100, ve200, ve101, ve201 });
+
+            context.Vehicles.AddOrUpdate(v => v.ID, new Vehicle[] { ve100, ve200, ve101, ve201, ve102, ve202 });
 
 
             context.StickerApplications.AddOrUpdate(a => a.ID, new StickerApplication[]
@@ -157,17 +160,27 @@
                     User =e101,
                     CreateDate = DateTime.Now,LastModified=DateTime.Now,
                     Owner = new ApplicationOwner(){Name =e101.Name},
-                    Quota =q16,
+                    Quota =q20,
                     Status =StickerApplicationStatus.WaitingForPayment,
                     Vehicle = ve101
                 },
                  new StickerApplication(){
-                    User =e201,
+                    User =e102,
+                    Payment=new Payment{Amount=q16.StickerFee,TransactionDate = DateTime.Now,TransactionNumber="TEST1234"},
                     CreateDate = DateTime.Now,LastModified=DateTime.Now,
-                    Owner = new ApplicationOwner(){Name =e201.Name},
+                    Owner = new ApplicationOwner(){Name =e102.Name},
                     Quota =q16,
                     Status =StickerApplicationStatus.WaitingForDelivery,
-                    Vehicle = ve201
+                    Vehicle = ve102
+                },
+                 new StickerApplication(){
+                    User =e202,
+                    Payment=new Payment{Amount=q17.StickerFee,TransactionDate = DateTime.Now,TransactionNumber="TEST5678"},
+                    CreateDate = DateTime.Now,LastModified=DateTime.Now,
+                    Owner = new ApplicationOwner(){Name =e202.Name},
+                    Quota =q17,
+                    Status =StickerApplicationStatus.WaitingForDelivery,
+                    Vehicle = ve202
                 }
             });
         }
