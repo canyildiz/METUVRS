@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace METU.VRS.Models
@@ -7,6 +8,8 @@ namespace METU.VRS.Models
     {
         [ForeignKey("Application")]
         public int ID { get; set; }
+
+        [Display(Name = "Payment Amount")]
         public int Amount { get; set; }
         public string TransactionNumber { get; set; }
         public DateTime TransactionDate { get; set; }

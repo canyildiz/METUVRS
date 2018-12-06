@@ -8,6 +8,13 @@ namespace METU.VRS.Tests.Controllers
     [TestClass]
     public class HomeControllerTest
     {
+        [AssemblyInitialize]
+        public static void AssemblyInit(TestContext context)
+        {
+            Migrations.TestDatabase.InitTestDatase();
+            University.Init();
+        }
+
         [TestInitialize]
         public void Init()
         {

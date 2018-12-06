@@ -35,7 +35,7 @@ namespace METU.VRS.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
-            ViewBag.UserName = "e100";
+            ViewBag.UserName = Request.Cookies["latest_user"] == null ? "e100" : Request.Cookies["latest_user"].Value;
             return View();
         }
 
@@ -50,6 +50,12 @@ namespace METU.VRS.Controllers
                 if (HttpContext != null)
                 {
                     FormsAuthentication.SetAuthCookie(user.UID, false);
+                    Response.Cookies.Add(new System.Web.HttpCookie("latest_user", user.UID)
+                    {
+                        Expires = System.DateTime.Now.AddDays(30),
+                        HttpOnly = true
+                    });
+
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);

@@ -7,28 +7,14 @@ using Moq;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace METU.VRS.Tests.Controllers
 {
     [TestClass]
-    public class StickerControllerTest
+    public class StickerControllerTest : ControllerTestBase
     {
-        [AssemblyInitialize]
-        public static void AssemblyInit(TestContext context)
-        {
-            Migrations.TestDatabase.InitTestDatase();
-            University.Init();
-        }
-
-        [TestInitialize]
-        public void Init()
-        {
-
-        }
-
         [TestMethod]
         public void IndexWithDataTest()
         {
@@ -104,40 +90,51 @@ namespace METU.VRS.Tests.Controllers
         }
 
         [TestMethod]
-        public void ApproveGetList()
+        public void Detail()
         {
-            var mockApproveUser = University.GetUser("o101");
+            var mockUser = University.GetUser("e100");
 
             StickerController controller = new StickerController();
-            controller.ControllerContext = new ControllerContext(MockAuthContext(mockApproveUser).Object, new RouteData(), controller);
+            controller.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), controller);
 
-            ViewResult result = controller.Approve() as ViewResult;
+            ViewResult result = controller.Detail(1) as ViewResult;
+
             Assert.IsNotNull(result);
-            Assert.AreNotEqual(0, ((List<StickerApplication>)result.Model).Count);
-            Assert.AreEqual(0, ((List<StickerApplication>)result.Model).Where(a => a.Status != StickerApplicationStatus.WaitingForApproval).Count());
+            Assert.IsInstanceOfType(result.Model, typeof(StickerApplication));
+
+            StickerApplication model = result.Model as StickerApplication;
+            Assert.AreEqual(1, model.ID);
         }
 
         [TestMethod]
-        public void TestDBConnection()
+        public void DetailNotAllowed()
         {
-            using (DatabaseContext db = new DatabaseContext())
-            {
-                List<StickerApplication> applications = db.StickerApplications
-                    .OrderByDescending(a => a.LastModified)
-                    .ToList();
-                Assert.AreNotEqual(0, applications.Count);
-            }
-        }
-        private Mock<HttpContextBase> MockAuthContext(User mockUser)
-        {
-            var httpreq = new Mock<HttpRequestBase>();
-            var httpctx = new Mock<HttpContextBase>();
-            var authUser = new Mock<METU.VRS.UI.METUPrincipal>();
-            authUser.Setup(u => u.User).Returns(mockUser);
+            var mockUser = University.GetUser("e100");
 
-            httpctx.Setup(ctx => ctx.Request).Returns(httpreq.Object);
-            httpctx.Setup(ctx => ctx.User).Returns(authUser.Object);
-            return httpctx;
+            StickerController controller = new StickerController();
+            controller.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), controller);
+
+            ActionResult result = controller.Detail(2);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(HttpUnauthorizedResult));
+        }
+
+        [TestMethod]
+        public void DetailwithApprovalUser()
+        {
+            var mockUser = University.GetUser("o101");
+
+            StickerController controller = new StickerController();
+            controller.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), controller);
+
+            ViewResult result = controller.Detail(1) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result.Model, typeof(StickerApplication));
+
+            StickerApplication model = result.Model as StickerApplication;
+            Assert.AreEqual(1, model.ID);
         }
     }
 }

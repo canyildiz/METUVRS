@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace METU.VRS.Models
 {
@@ -17,12 +18,12 @@ namespace METU.VRS.Models
 
     public enum StickerClasses
     {
-        Staff = 10,
-        Foundation = 20,
-        Visitor = 30,
-        Alumni = 40,
-        Technopolis = 50,
-        Student = 60,
-        StudentParent = 70
+        [Description("Staff Sticker")] Staff = 10,
+        [Description("Foundation Sticker")] Foundation = 20,
+        [Description("Visitor Sticker")] Visitor = 30,
+        [Description("Alumni Sticker")] Alumni = 40,
+        [Description("Technopolis Sticker")]Technopolis = 50,
+        [Description("Student Sticker")] Student = 60,
+        [Description("Student Parent Sticker")] StudentParent = 70
     }
 }

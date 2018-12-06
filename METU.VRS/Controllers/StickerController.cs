@@ -29,7 +29,7 @@ namespace METU.VRS.Controllers
             {
                 List<StickerApplication> applications = db.StickerApplications
                     .Include(s => s.Vehicle)
-                    .Include(s => s.Quota)
+                    .Include(s => s.Quota.Type)
                     .Include(s => s.Owner)
                     .Where(s => s.User.UID == ((METUPrincipal)User).User.UID)
                     .OrderByDescending(s => s.LastModified)
@@ -93,20 +93,43 @@ namespace METU.VRS.Controllers
             }
         }
 
+
         [HttpGet]
-        [Authorize(Roles = "approval_user")]
-        public ActionResult Approve()
+        public ActionResult Detail(int Id)
         {
-            Trace.WriteLine("GET /Sticker/Approve");
+            Trace.WriteLine("GET /Sticker/Detail");
             using (DatabaseContext db = GetNewDBContext())
             {
-                List<StickerApplication> applications = db.StickerApplications
-                    .Where(a => a.Status == StickerApplicationStatus.WaitingForApproval)
-                    .OrderByDescending(a => a.LastModified)
-                    .ToList();
+                var application = db.StickerApplications
+                    .Include(a => a.Owner)
+                    .Include(a => a.Payment)
+                    .Include(a => a.Quota.Term)
+                    .Include(a => a.Quota.Type)
+                    .Include(a => a.Sticker)
+                    .Include(a => a.User.Division)
+                    .Include(a => a.User.Category)
+                    .Include(a => a.Vehicle)
+                    .Where(a => a.ID == Id)
+                    .FirstOrDefault();
 
-                return View(applications);
+                if (application == null)
+                {
+                    return new HttpNotFoundResult();
+                }
+
+                if (!(User.IsInRole("delivery_user") || User.IsInRole("approval_user")) &&
+                    application.User.ID != ((METUPrincipal)User).User.ID)
+                {
+                    return new HttpUnauthorizedResult();
+                }
+                else if (User.IsInRole("approval_user") && application.User.Division.ID != ((METUPrincipal)User).User.Division.ID)
+                {
+                    return new HttpUnauthorizedResult();
+                }
+
+                return View(application);
             }
+
         }
     }
 }

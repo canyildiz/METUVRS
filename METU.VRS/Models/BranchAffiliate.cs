@@ -1,9 +1,13 @@
-﻿namespace METU.VRS.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace METU.VRS.Models
 {
     public class BranchAffiliate
     {
         public int ID { get; set; }
         public string UID { get; set; }
+
+        [Display(Name = "Division")]
         public string Name { get; set; }
         public BranchAffiliateTypes Type { get; set; }
     }

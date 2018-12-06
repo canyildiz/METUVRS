@@ -17,3 +17,9 @@ select,
 textarea {
     max-width: 280px;
 }
+
+    input.no-limit,
+    select.no-limit,
+    textarea.no-limit {
+        max-width: 100%;
+    }

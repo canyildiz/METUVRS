@@ -1,0 +1,108 @@
+﻿@model METU.VRS.Models.StickerApplication
+@using METU.VRS.Models
+@using METU.VRS.UI
+
+@{
+    Layout = null;
+}
+
+@helper Maybe(object obj, string ifNull = "")
+{
+    string text = "";
+    try { text = obj.ToString(); }
+    catch { }
+
+    if (!string.IsNullOrEmpty(text))
+    {
+        @text
+    }
+    else
+    {
+        @ifNull;
+    }
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">Sticker Application Details for #@Model.ID</h4>
+</div>
+<div class="modal-body">
+    <div class="table-responsive">
+        <table class="table">
+            <caption>
+                &nbsp;
+            </caption>
+            <tr>
+                <td>@Html.LabelFor(m => m.Owner.Name)</td>
+                <td>@Model.Owner.Name</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.User.Division.Name)</td>
+                <td>@Model.User.Division.Name</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Status)</td>
+                <td>@Model.Status.ToDescription()</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.CreateDate)</td>
+                <td>@Html.DisplayFor(m => m.CreateDate)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.LastModified)</td>
+                <td>@Html.DisplayFor(m => m.LastModified)</td>
+            </tr>
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Payment.Amount)</td>
+                <td>@Maybe(@Model.Payment?.Amount, "Not Paid Yet")</td>
+            </tr>
+            <tr>
+                <td>@Html.Label("Sticker Term")</td>
+                <td>
+                    @if (Model.Term.Type == TermTypes.LongTerm)
+                    {
+                        @:Unlimited
+                    }
+                    else
+                    {
+                        @:From @Model.Term.StartDate.ToShortDateString() To @Model.Term.EndDate.ToShortDateString()
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Type.Description)</td>
+                <td>@Model.Type.Description (@Model.Type.Class.ToString() - @Model.Type.Color)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Sticker.SerialNumber)</td>
+                <td>@Maybe(@Model.Sticker?.SerialNumber, "N/A")</td>
+            </tr>
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Vehicle.OwnerName)</td>
+                <td>@Model.Vehicle.OwnerName</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Vehicle.PlateNumber)</td>
+                <td>@Model.Vehicle.PlateNumber</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Vehicle.RegistrationNumber)</td>
+                <td>@Model.Vehicle.RegistrationNumber</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Vehicle.Type)</td>
+                <td>@Model.Vehicle.Type.ToString()</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+
