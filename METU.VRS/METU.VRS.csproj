@@ -168,8 +168,13 @@
     <Compile Include="Controllers\DeliverController.cs" />
     <Compile Include="Controllers\ApproveController.cs" />
     <Compile Include="Controllers\Base\ControllerBase.cs" />
+    <Compile Include="Controllers\PayController.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\ConfigurationDefault.cs" />
     <Compile Include="Migrations\TestDatabase.cs" />
+    <Compile Include="Models\CT\PaymentResponseFail.cs" />
+    <Compile Include="Models\CT\PaymentResponseSuccess.cs" />
+    <Compile Include="Models\CT\PaymentRequest.cs" />
     <Compile Include="Models\CT\ApprovementOption.cs" />
     <Compile Include="UI\FormsAuthAttribute.cs" />
     <Compile Include="Models\ApplicationOwner.cs" />
@@ -265,6 +270,7 @@
     <Content Include="Views\Sticker\Detail.cshtml" />
     <Content Include="Views\Deliver\Index.cshtml" />
     <Content Include="Views\Deliver\Deliver.cshtml" />
+    <Content Include="Views\Pay\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
