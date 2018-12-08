@@ -131,6 +131,7 @@
             Vehicle ve200 = new Vehicle { OwnerName = e200.Name, PlateNumber = "06AA200", RegistrationNumber = "AA200000", Type = VehicleType.Car };
             Vehicle ve101 = new Vehicle { OwnerName = e101.Name, PlateNumber = "06AA101", RegistrationNumber = "AA101000", Type = VehicleType.Car };
             Vehicle ve102 = new Vehicle { OwnerName = e102.Name, PlateNumber = "06AA102", RegistrationNumber = "AA102000", Type = VehicleType.Car };
+            Vehicle ve103 = new Vehicle { OwnerName = e103.Name, PlateNumber = "06AA103", RegistrationNumber = "AA103000", Type = VehicleType.Car };
             Vehicle ve201 = new Vehicle { OwnerName = e201.Name, PlateNumber = "06AA201", RegistrationNumber = "AA201000", Type = VehicleType.Car };
             Vehicle ve202 = new Vehicle { OwnerName = e202.Name, PlateNumber = "06AA202", RegistrationNumber = "AA202000", Type = VehicleType.Car };
 
@@ -172,6 +173,14 @@
                     Quota =q16,
                     Status =StickerApplicationStatus.WaitingForDelivery,
                     Vehicle = ve102
+                },
+                 new StickerApplication(){
+                    User =e103,
+                    CreateDate = DateTime.Now,LastModified=DateTime.Now,
+                    Owner = new ApplicationOwner(){Name =e103.Name},
+                    Quota =q20,
+                    Status =StickerApplicationStatus.WaitingForPayment,
+                    Vehicle = ve103
                 },
                  new StickerApplication(){
                     User =e202,
