@@ -1,5 +1,7 @@
 ﻿using METU.VRS.Models;
+using METU.VRS.Models.Interface;
 using Microsoft.Azure.Services.AppAuthentication;
+using System;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
@@ -50,7 +52,12 @@ namespace METU.VRS.Services
                 {
                     item.State = EntityState.Unchanged;
                 }
-                
+
+                if (item.CurrentValues.PropertyNames.Contains("LastModified")
+                    && item.State == EntityState.Modified)
+                {
+                    ((ILastModified)item.Entity).LastModified = DateTime.Now;
+                }
             }
 
             return base.SaveChanges();

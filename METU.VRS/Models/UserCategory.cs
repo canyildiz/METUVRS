@@ -21,9 +21,12 @@ namespace METU.VRS.Models
             }
         }
 
-        public bool CanApplyOnBehalfOf()
+        public bool CanApplyOnBehalfOf
         {
-            return (UID == "affiliate");
+            get
+            {
+                return (UID == "affiliate");
+            }
         }
     }
 }

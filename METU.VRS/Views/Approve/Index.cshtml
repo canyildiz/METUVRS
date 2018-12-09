@@ -30,6 +30,9 @@
 <table class="table">
     <tr>
         <th>
+            ID
+        </th>
+        <th>
             @Html.ActionLink("Owner Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
@@ -49,6 +52,9 @@
     {
         <tr>
             <td>
+                #@Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Owner.Name)
             </td>
             <td>
@@ -61,7 +67,7 @@
                 @Html.DisplayFor(modelItem => item.Type.Description)
             </td>
             <td>
-                <a href="@Url.Action("Detail", "Sticker", new { id = item.ID })" data-toggle="modal" data-target="#details" class="btn btn-default">Detail&nbsp;<i class="fa fa-file-text-o"></i></a>&nbsp;
+                <a href="@Url.Action("Detail", "Sticker", new { id = item.ID })" data-toggle="modal" data-target="#details" class="btn btn-primary">Detail&nbsp;<i class="fa fa-file-text-o"></i></a>&nbsp;
             </td>
             <td>
                 <div class="dropdown">

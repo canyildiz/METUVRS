@@ -77,10 +77,11 @@
 
             //StickerTerm
             StickerTerm longterm = new StickerTerm() { Type = TermTypes.LongTerm, StartDate = new DateTime(2018, 1, 1), EndDate = new DateTime(2099, 1, 1) };
-            StickerTerm calenderyear = new StickerTerm() { Type = TermTypes.CalendarYear, StartDate = new DateTime(2018, 1, 1), EndDate = new DateTime(2019, 1, 1) };
-            StickerTerm academicyear = new StickerTerm() { Type = TermTypes.AcademicYear, StartDate = new DateTime(2018, 10, 1), EndDate = new DateTime(2019, 10, 1) };
+            StickerTerm calenderyear2018 = new StickerTerm() { Type = TermTypes.CalendarYear, StartDate = new DateTime(2018, 1, 1), EndDate = new DateTime(2019, 1, 1) };
+            StickerTerm academicyear2017 = new StickerTerm() { Type = TermTypes.AcademicYear, StartDate = new DateTime(2017, 10, 1), EndDate = new DateTime(2018, 10, 1) };
+            StickerTerm academicyear2018 = new StickerTerm() { Type = TermTypes.AcademicYear, StartDate = new DateTime(2018, 10, 1), EndDate = new DateTime(2019, 10, 1) };
 
-            context.StickerTerms.AddOrUpdate(a => new { a.Type, a.StartDate, a.EndDate }, new StickerTerm[] { longterm, calenderyear, academicyear });
+            context.StickerTerms.AddOrUpdate(a => new { a.Type, a.StartDate, a.EndDate }, new StickerTerm[] { longterm, calenderyear2018, academicyear2018 });
 
 
             //StickerType
@@ -106,36 +107,38 @@
             Quota q1 = new Quota() { UID = "q1", Term = longterm, Division = null, StickerFee = 40, TotalQuota = -1, Type = st1 };
             Quota q2 = new Quota() { UID = "q2", Term = longterm, Division = null, StickerFee = 40, TotalQuota = -1, Type = st2 };
             Quota q3 = new Quota() { UID = "q3", Term = longterm, Division = null, StickerFee = 60, TotalQuota = -1, Type = st3 };
-            Quota q4 = new Quota() { UID = "q4", Term = calenderyear, Division = null, StickerFee = 700, TotalQuota = 100, Type = st4 };
-            Quota q5 = new Quota() { UID = "q5", Term = calenderyear, Division = null, StickerFee = 60, TotalQuota = 100, Type = st5 };
-            Quota q6 = new Quota() { UID = "q6", Term = academicyear, Division = null, StickerFee = 60, TotalQuota = 100, Type = st6 };
-            Quota q7 = new Quota() { UID = "q7", Term = calenderyear, Division = null, StickerFee = 700, TotalQuota = 100, Type = st7 };
-            Quota q8 = new Quota() { UID = "q8", Term = calenderyear, Division = null, StickerFee = 60, TotalQuota = 100, Type = st8 };
-            Quota q9 = new Quota() { UID = "q9", Term = calenderyear, Division = null, StickerFee = 60, TotalQuota = 1000, Type = st9 };
-            Quota q10 = new Quota() { UID = "q10", Term = calenderyear, Division = null, StickerFee = 700, TotalQuota = -1, Type = st10 };
-            Quota q11 = new Quota() { UID = "q11", Term = calenderyear, Division = null, StickerFee = 600, TotalQuota = 5000, Type = st11 };
-            Quota q12 = new Quota() { UID = "q12", Term = academicyear, Division = II, StickerFee = 500, TotalQuota = 1, Type = st12 };
-            Quota q13 = new Quota() { UID = "q13", Term = academicyear, Division = II, StickerFee = 100, TotalQuota = 100, Type = st13 };
-            Quota q14 = new Quota() { UID = "q14", Term = academicyear, Division = null, StickerFee = 300, TotalQuota = 500, Type = st14 };
-            Quota q15 = new Quota() { UID = "q15", Term = academicyear, Division = null, StickerFee = 60, TotalQuota = 500, Type = st15 };
-            Quota q16 = new Quota() { UID = "q16", Term = academicyear, Division = FEAS, StickerFee = 500, TotalQuota = 1, Type = st12 };
-            Quota q17 = new Quota() { UID = "q17", Term = academicyear, Division = FEAS, StickerFee = 100, TotalQuota = 100, Type = st13 };
-            Quota q18 = new Quota() { UID = "q18", Term = academicyear, Division = IAM, StickerFee = 500, TotalQuota = 1, Type = st12 };
-            Quota q19 = new Quota() { UID = "q19", Term = academicyear, Division = IAM, StickerFee = 100, TotalQuota = 100, Type = st13 };
-            Quota q20 = new Quota() { UID = "q20", Term = academicyear, Division = MUH, StickerFee = 500, TotalQuota = 2, Type = st12 };
-            Quota q21 = new Quota() { UID = "q21", Term = academicyear, Division = MUH, StickerFee = 100, TotalQuota = 100, Type = st13 };
+            Quota q4 = new Quota() { UID = "q4", Term = calenderyear2018, Division = null, StickerFee = 700, TotalQuota = 100, Type = st4 };
+            Quota q5 = new Quota() { UID = "q5", Term = calenderyear2018, Division = null, StickerFee = 60, TotalQuota = 100, Type = st5 };
+            Quota q6 = new Quota() { UID = "q6", Term = academicyear2018, Division = null, StickerFee = 60, TotalQuota = 100, Type = st6 };
+            Quota q7 = new Quota() { UID = "q7", Term = calenderyear2018, Division = null, StickerFee = 700, TotalQuota = 100, Type = st7 };
+            Quota q8 = new Quota() { UID = "q8", Term = calenderyear2018, Division = null, StickerFee = 60, TotalQuota = 100, Type = st8 };
+            Quota q9 = new Quota() { UID = "q9", Term = calenderyear2018, Division = null, StickerFee = 60, TotalQuota = 1000, Type = st9 };
+            Quota q10 = new Quota() { UID = "q10", Term = calenderyear2018, Division = null, StickerFee = 700, TotalQuota = -1, Type = st10 };
+            Quota q11 = new Quota() { UID = "q11", Term = calenderyear2018, Division = null, StickerFee = 600, TotalQuota = 5000, Type = st11 };
+            Quota q12 = new Quota() { UID = "q12", Term = academicyear2018, Division = II, StickerFee = 500, TotalQuota = 1, Type = st12 };
+            Quota q13 = new Quota() { UID = "q13", Term = academicyear2018, Division = II, StickerFee = 100, TotalQuota = 100, Type = st13 };
+            Quota q14 = new Quota() { UID = "q14", Term = academicyear2018, Division = null, StickerFee = 300, TotalQuota = 500, Type = st14 };
+            Quota q15 = new Quota() { UID = "q15", Term = academicyear2018, Division = null, StickerFee = 60, TotalQuota = 500, Type = st15 };
+            Quota q16 = new Quota() { UID = "q16", Term = academicyear2018, Division = FEAS, StickerFee = 500, TotalQuota = 1, Type = st12 };
+            Quota q17 = new Quota() { UID = "q17", Term = academicyear2018, Division = FEAS, StickerFee = 100, TotalQuota = 100, Type = st13 };
+            Quota q18 = new Quota() { UID = "q18", Term = academicyear2018, Division = IAM, StickerFee = 500, TotalQuota = 1, Type = st12 };
+            Quota q19 = new Quota() { UID = "q19", Term = academicyear2018, Division = IAM, StickerFee = 100, TotalQuota = 100, Type = st13 };
+            Quota q20 = new Quota() { UID = "q20", Term = academicyear2018, Division = MUH, StickerFee = 500, TotalQuota = 2, Type = st12 };
+            Quota q21 = new Quota() { UID = "q21", Term = academicyear2018, Division = MUH, StickerFee = 100, TotalQuota = 100, Type = st13 };
+            Quota q22 = new Quota() { UID = "q22", Term = academicyear2017, Division = IAM, StickerFee = 300, TotalQuota = 2, Type = st12 };
 
-            context.Quotas.AddOrUpdate(a => a.UID, new Quota[] { q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21 });
+            context.Quotas.AddOrUpdate(a => a.UID, new Quota[] { q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22 });
 
             Vehicle ve100 = new Vehicle { OwnerName = e100.Name, PlateNumber = "06AA100", RegistrationNumber = "AA100000", Type = VehicleType.Car };
             Vehicle ve200 = new Vehicle { OwnerName = e200.Name, PlateNumber = "06AA200", RegistrationNumber = "AA200000", Type = VehicleType.Car };
             Vehicle ve101 = new Vehicle { OwnerName = e101.Name, PlateNumber = "06AA101", RegistrationNumber = "AA101000", Type = VehicleType.Car };
-            Vehicle ve102 = new Vehicle { OwnerName = e102.Name, PlateNumber = "06AA102", RegistrationNumber = "AA102000", Type = VehicleType.Car };
             Vehicle ve201 = new Vehicle { OwnerName = e201.Name, PlateNumber = "06AA201", RegistrationNumber = "AA201000", Type = VehicleType.Car };
+            Vehicle ve102 = new Vehicle { OwnerName = e102.Name, PlateNumber = "06AA102", RegistrationNumber = "AA102000", Type = VehicleType.Car };
             Vehicle ve202 = new Vehicle { OwnerName = e202.Name, PlateNumber = "06AA202", RegistrationNumber = "AA202000", Type = VehicleType.Car };
+            Vehicle ve103 = new Vehicle { OwnerName = e102.Name, PlateNumber = "06AA103", RegistrationNumber = "AA103000", Type = VehicleType.Car };
+            Vehicle ve203 = new Vehicle { OwnerName = e202.Name, PlateNumber = "06AA203", RegistrationNumber = "AA203000", Type = VehicleType.Car };
 
-
-            context.Vehicles.AddOrUpdate(v => v.ID, new Vehicle[] { ve100, ve200, ve101, ve201, ve102, ve202 });
+            context.Vehicles.AddOrUpdate(v => v.ID, new Vehicle[] { ve100, ve200, ve101, ve201, ve102, ve202, ve103, ve203 });
 
 
             context.StickerApplications.AddOrUpdate(a => a.ID, new StickerApplication[]
@@ -158,7 +161,9 @@
                 },
                  new StickerApplication(){
                     User =e101,
-                    CreateDate = DateTime.Now,LastModified=DateTime.Now,
+                    CreateDate = DateTime.Now,
+                    LastModified =DateTime.Now,
+                    ApproveDate=DateTime.Now,
                     Owner = new ApplicationOwner(){Name =e101.Name},
                     Quota =q20,
                     Status =StickerApplicationStatus.WaitingForPayment,
@@ -166,7 +171,9 @@
                 },
                  new StickerApplication(){
                     User =e201,
-                    CreateDate = DateTime.Now,LastModified=DateTime.Now,
+                    CreateDate = DateTime.Now,
+                    LastModified =DateTime.Now,
+                    ApproveDate=DateTime.Now,
                     Owner = new ApplicationOwner(){Name =e201.Name},
                     Quota =q20,
                     Status =StickerApplicationStatus.WaitingForPayment,
@@ -175,7 +182,9 @@
                  new StickerApplication(){
                     User =e102,
                     Payment=new Payment{Amount=q16.StickerFee,TransactionDate = DateTime.Now,TransactionNumber="TEST1234"},
-                    CreateDate = DateTime.Now,LastModified=DateTime.Now,
+                    CreateDate = DateTime.Now,
+                    LastModified =DateTime.Now,
+                    ApproveDate=DateTime.Now,
                     Owner = new ApplicationOwner(){Name =e102.Name},
                     Quota =q16,
                     Status =StickerApplicationStatus.WaitingForDelivery,
@@ -184,11 +193,39 @@
                  new StickerApplication(){
                     User =e202,
                     Payment=new Payment{Amount=q17.StickerFee,TransactionDate = DateTime.Now,TransactionNumber="TEST5678"},
-                    CreateDate = DateTime.Now,LastModified=DateTime.Now,
+                    CreateDate = DateTime.Now,
+                    LastModified =DateTime.Now,
+                    ApproveDate=DateTime.Now,
                     Owner = new ApplicationOwner(){Name =e202.Name},
                     Quota =q17,
                     Status =StickerApplicationStatus.WaitingForDelivery,
                     Vehicle = ve202
+                },
+                 new StickerApplication(){
+                    User =e103,
+                    Payment=new Payment{Amount=q22.StickerFee,TransactionDate = DateTime.Now,TransactionNumber="TEST1234"},
+                    Sticker =new Sticker{SerialNumber=12345},
+                    CreateDate = DateTime.Now,
+                    LastModified =DateTime.Now,
+                    ApproveDate=q22.Term.StartDate,
+                    DeliveryDate=q22.Term.StartDate,
+                    Owner = new ApplicationOwner(){Name =e103.Name},
+                    Quota =q22,
+                    Status =StickerApplicationStatus.Active,
+                    Vehicle = ve103
+                },
+                 new StickerApplication(){
+                    User =e203,
+                    Payment=new Payment{Amount=q22.StickerFee,TransactionDate = DateTime.Now,TransactionNumber="TEST5678"},
+                    Sticker =new Sticker{SerialNumber=23456},
+                    CreateDate = DateTime.Now,
+                    LastModified =DateTime.Now,
+                    ApproveDate=q22.Term.StartDate,
+                    DeliveryDate=q22.Term.StartDate,
+                    Owner = new ApplicationOwner(){Name =e203.Name},
+                    Quota =q22,
+                    Status =StickerApplicationStatus.Active,
+                    Vehicle = ve203
                 }
             });
         }

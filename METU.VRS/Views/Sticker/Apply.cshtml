@@ -3,9 +3,20 @@
 @{
     ViewBag.Title = "Apply";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    bool CanApplyOnBehalfOf = ((METUPrincipal)User).User.Category.CanApplyOnBehalfOf;
+    object applicationOwner = null;
 }
 
-<h3>Sticker Application Form</h3>
+@if (CanApplyOnBehalfOf)
+{
+    <h3>New Sticker Application Form for in behalf of someone else</h3>
+    applicationOwner = new { @class = "form-control" };
+}
+else
+{
+    <h3>New Sticker Application Form</h3>
+    applicationOwner = new { @class = "form-control", @Value = ((METUPrincipal)User).User.Name, @disabled = "disabled" };
+}
 
 @using (Html.BeginForm())
 {
@@ -16,7 +27,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Owner.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Owner.Name, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @Value = ((METUPrincipal)User).User.Name } })
+                @Html.EditorFor(model => model.Owner.Name, new { htmlAttributes = applicationOwner })
                 @Html.ValidationMessageFor(model => model.Owner.Name, "", htmlAttributes: new { @class = "text-danger" })
             </div>
         </div>

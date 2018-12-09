@@ -9,9 +9,13 @@
 }
 
 <h3>Sticker Application Payment</h3>
-@if (@Request.Params["err_msg"] != null)
+@if (@Request.Params["hasError"] != null)
 {
-    <div class="alert alert-danger">@Request.Params["err_msg"]</div>
+    <div class="alert alert-danger">An error has occured with your payment request, please try again</div>
+}
+@if (@Request.Params["insufficientFunds"] != null)
+{
+    <div class="alert alert-danger">There are insufficient funds in your credit card or your account has reached its credit limit</div>
 }
 @{
     String domainName = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
@@ -30,14 +34,17 @@
     String hash = Convert.ToBase64String(inputbytes);
 }
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { @action = "https://entegrasyon.asseco-see.com.tr/fim/est3Dgate" }))
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "form1", @action = "https://entegrasyon.asseco-see.com.tr/fim/est3Dgate" }))
 {
     <div class="form-horizontal payment-form col-md-6">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.Application.Quota.StickerFee, htmlAttributes: new { @class = "control-label col-md-3" })
-            <div class="col-md-3">
-                @Html.EditorFor(model => model.Application.Quota.StickerFee, new { htmlAttributes = new { @class = "form-control text-right", @disabled = "disabled" } })
+            <div class="col-md-4">
+                <div class="input-group">
+                    @Html.EditorFor(model => model.Application.Quota.StickerFee, new { htmlAttributes = new { @class = "form-control text-right", @disabled = "disabled" } })
+                    <span class="input-group-addon">TL</span>
+                </div>
                 @Html.ValidationMessageFor(model => model.Application.Quota.StickerFee, "", htmlAttributes: new { @class = "text-danger" })
             </div>
         </div>
@@ -51,20 +58,25 @@
         <div class="form-group">
             @Html.LabelFor(model => model.pan, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-9">
-                @Html.EditorFor(model => model.pan, new { htmlAttributes = new { @Value = "4531444531442283", @class = "form-control" } })
+                @Html.EditorFor(model => model.pan, new { htmlAttributes = new { @Value = "", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.pan, "", htmlAttributes: new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             <label for="" class="control-label col-md-3">Expiry Date</label>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 @Html.DropDownListFor(model => model.Ecom_Payment_Card_ExpDate_Month, new SelectList(Model.ExpiryMonths(), "Key", "Value"), htmlAttributes: new { @name = "Ecom_Payment_Card_ExpDate_Month", @class = "form-control dropdown" })
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 @Html.DropDownListFor(model => model.Ecom_Payment_Card_ExpDate_Year, new SelectList(Model.ExpiryYears(), "Key", "Value"), htmlAttributes: new { @name = "Ecom_Payment_Card_ExpDate_Year", @class = "form-control dropdown" })
             </div>
-            @Html.LabelFor(model => model.cv2, htmlAttributes: new { @class = "control-label col-md-1" })
-            <div class="col-md-2">
+            <div class="col-md-8 col-md-offset-3">
+                <span class="text-danger" id="ExpDateMsg"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.cv2, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-4">
                 @Html.EditorFor(model => model.cv2, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.cv2, "", htmlAttributes: new { @class = "text-danger" })
             </div>
@@ -72,7 +84,7 @@
         <div class="form-group">
             <div class="col-md-offset-3 col-md-10">
                 <input type="submit" value="Make Payment" class="btn btn-success" />
-                <a href="@Url.Action("", "Sticker")" class="btn btn-danger">Cancel</a>
+                <a href="@Url.Action("Index", "Sticker")" class="btn btn-primary">Return Back</a>
             </div>
         </div>
     </div>
@@ -90,32 +102,36 @@
     <input type="hidden" name="lang" value="tr">
     <input type="hidden" name="currency" value="949">
     <input type="hidden" name="firmaadi" value="METU VRS">
-    <input type="hidden" name="Fismi" value="is">
-    <input type="hidden" name="faturaFirma" value="faturaFirma">
-    <input type="hidden" name="Fadres" value="XXX">
-    <input type="hidden" name="Fadres2" value="XXX">
-    <input type="hidden" name="Fil" value="XXX">
-    <input type="hidden" name="Filce" value="XXX">
-    <input type="hidden" name="Fpostakodu" value="postakod93013">
-    <input type="hidden" name="tel" value="XXX">
-    <input type="hidden" name="fulkekod" value="tr">
-    <input type="hidden" name="nakliyeFirma" value="na fi">
-    <input type="hidden" name="tismi" value="XXX">
-    <input type="hidden" name="tadres" value="XXX">
-    <input type="hidden" name="tadres2" value="XXX" />
-    <input type="hidden" name="til" value="XXX">
-    <input type="hidden" name="tilce" value="XXX">
-    <input type="hidden" name="tpostakodu" value="ttt postakod93013">
-    <input type="hidden" name="tulkekod" value="usa">
-    <input type="hidden" name="itemnumber1" value="a1">
-    <input type="hidden" name="productcode1" value="a2">
-    <input type="hidden" name="qty1" value="3">
-    <input type="hidden" name="desc1" value="a4 desc">
-    <input type="hidden" name="id1" value="a5">
-    <input type="hidden" name="price1" value="6.25">
-    <input type="hidden" name="total1" value="7.50">
+
 }
 
 @section Scripts {
+
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        var ok = false;
+        $("#form1").submit(function (e) {
+            if (ok) return true;
+
+            e.preventDefault();
+            var year = $("#Ecom_Payment_Card_ExpDate_Year").val();
+            var month = $("#Ecom_Payment_Card_ExpDate_Month").val();
+            var today = new Date();
+            var isExpired = today.getFullYear() <= (2000 + parseInt(year)) && parseInt(month) < today.getMonth();
+
+            if (isExpired) {
+                $("#ExpDateMsg").html("Card has an invalid date");
+            }
+            else {
+                $("#ExpDateMsg").html("")
+                $(this).validate();
+
+                if ($(this).valid()) {
+                    ok = true;
+                    $(this).submit();
+                };
+            }
+        })
+    </script>
 }

@@ -1,5 +1,6 @@
 ﻿using METU.VRS.Controllers.Static;
 using METU.VRS.Models.CT;
+using METU.VRS.Models.Interface;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +10,7 @@ using System.Linq;
 
 namespace METU.VRS.Models
 {
-    public class StickerApplication
+    public class StickerApplication : ILastModified
     {
         public int ID { get; set; }
 
@@ -27,6 +28,8 @@ namespace METU.VRS.Models
         [DataType(DataType.Date)]
         [Display(Name = "Last Modified")]
         public DateTime LastModified { get; set; }
+
+
 
 
         private string _selectedType = null;
@@ -60,6 +63,19 @@ namespace METU.VRS.Models
                     Remaining = q.RemainingQuota
                 }).ToList();
             }
+        }
+
+        public StickerApplication Clone()
+        {
+            return new StickerApplication
+            {
+                ID = 0,
+                Vehicle = Vehicle,
+                User = User,
+                Owner = Owner,
+                SelectedType = SelectedType,
+                Sticker = new Sticker { SerialNumber = Sticker.SerialNumber }
+            };
         }
 
         public virtual Vehicle Vehicle { get; set; } = new Vehicle();

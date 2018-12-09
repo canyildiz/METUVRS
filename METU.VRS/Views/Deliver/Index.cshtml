@@ -10,6 +10,10 @@
 
 
 <h4>@ViewBag.Title</h4>
+@if (@Request.Params["stickerInUse"] != null)
+{
+    <div class="alert alert-danger">The sticker number is already in use!</div>
+}
 @using (Html.BeginForm("Index", "Deliver", FormMethod.Get))
 {
     <div class="row">
@@ -30,6 +34,9 @@
 <table class="table">
     <tr>
         <th>
+            ID
+        </th>
+        <th>
             @Html.ActionLink("Owner Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
@@ -49,6 +56,9 @@
     {
         <tr>
             <td>
+                #@Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Owner.Name)
             </td>
             <td>
@@ -61,7 +71,7 @@
                 @Html.DisplayFor(modelItem => item.Type.Description)
             </td>
             <td>
-                <a href="@Url.Action("Detail", "Sticker", new { id = item.ID })" data-toggle="modal" data-target="#details" class="btn btn-default">Detail&nbsp;<i class="fa fa-file-text-o"></i></a>
+                <a href="@Url.Action("Detail", "Sticker", new { id = item.ID })" data-toggle="modal" data-target="#details" class="btn btn-primary">Detail&nbsp;<i class="fa fa-file-text-o"></i></a>
             </td>
             <td>
                 <div class="dropdown">
@@ -92,8 +102,10 @@
             </div>
         </div>
     </div>
+
     @section scripts{
         @Scripts.Render("~/bundles/jqueryval")
+
         <script>
             $('#details').on('shown.bs.modal', function () {
                 $(this).scrollTop(0);

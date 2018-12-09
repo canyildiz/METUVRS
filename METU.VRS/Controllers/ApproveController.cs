@@ -4,6 +4,7 @@ using METU.VRS.Models.CT;
 using METU.VRS.Services;
 using METU.VRS.UI;
 using PagedList;
+using System;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
@@ -114,7 +115,7 @@ namespace METU.VRS.Controllers
                 }
 
                 ApprovementOption approvementOption = application.GetApprovementOptions().Where(a => a.QuotaID == QuotaID).FirstOrDefault();
-                if (approvementOption==null)
+                if (approvementOption == null)
                 {
                     throw new HttpAntiForgeryException();
                 }
@@ -126,6 +127,7 @@ namespace METU.VRS.Controllers
                 }
                 db.Quotas.Attach(quota);
                 application.Status = StickerApplicationStatus.WaitingForPayment;
+                application.ApproveDate = DateTime.Now;
                 application.Quota = quota;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -157,6 +159,7 @@ namespace METU.VRS.Controllers
                 }
 
                 application.Status = StickerApplicationStatus.NotApproved;
+                application.ApproveDate = DateTime.Now;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

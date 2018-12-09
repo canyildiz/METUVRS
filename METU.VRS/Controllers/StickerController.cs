@@ -8,6 +8,7 @@ using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace METU.VRS.Controllers
 {
@@ -30,6 +31,7 @@ namespace METU.VRS.Controllers
                 List<StickerApplication> applications = db.StickerApplications
                     .Include(s => s.Vehicle)
                     .Include(s => s.Quota.Type)
+                    .Include(s => s.Quota.Term)
                     .Include(s => s.Owner)
                     .Include(s => s.Sticker)
                     .Where(s => s.User.UID == ((METUPrincipal)User).User.UID)
@@ -51,8 +53,43 @@ namespace METU.VRS.Controllers
         public ActionResult Apply()
         {
             Trace.WriteLine("GET /Sticker/Apply");
-            return View(new StickerApplication());
+            if (((METUPrincipal)User).User.CanApplyForMore)
+            {
+                return View(new StickerApplication());
+            }
+            else
+            {
+                return RedirectToAction("Index", "Sticker", new { nomoresticker = "1" });
+            }
+
         }
+
+        [HttpGet]
+        public ActionResult Renew(int Id)
+        {
+            Trace.WriteLine("GET /Sticker/Renew");
+            ActionResult detail = Detail(Id);
+            if (!(detail is ViewResult))
+            {
+                return detail;
+            }
+
+            StickerApplication application = (detail as ViewResult).Model as StickerApplication;
+            ActionResult newApplication = Apply(application.Clone());
+
+            if (!(newApplication is EmptyResult))
+            {
+                using (DatabaseContext db = GetNewDBContext())
+                {
+                    db.StickerApplications.Attach(application);
+                    application.Status = StickerApplicationStatus.Expired;
+                    db.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -60,18 +97,44 @@ namespace METU.VRS.Controllers
         {
             Trace.WriteLine("POST /Sticker/Apply");
 
+            if (!((METUPrincipal)User).User.CanApplyForMore)
+            {
+                return RedirectToAction("Index", "Sticker", new { nomoresticker = "1" });
+            }
+
             if (ModelState.IsValid)
             {
                 using (DatabaseContext db = GetNewDBContext())
                 {
+
+                    int count = db.StickerApplications.Where(a => a.Vehicle.PlateNumber == application.Vehicle.PlateNumber &&
+                          (a.User.UID != ((METUPrincipal)User).User.UID ||
+                              (a.User.UID == ((METUPrincipal)User).User.UID &&
+                                  (a.Status == StickerApplicationStatus.Active ||
+                                  a.Status == StickerApplicationStatus.WaitingForDelivery ||
+                                  a.Status == StickerApplicationStatus.WaitingForPayment ||
+                                  a.Status == StickerApplicationStatus.WaitingForApproval)))).Count();
+
+                    if (count > 0)
+                    {
+                        return RedirectToAction("Index", new { vehicleAlreadyActive = "1" });
+                    }
+
                     application.ApproveDate = null;
                     application.CreateDate = DateTime.Now;
                     application.DeliveryDate = null;
                     application.LastModified = DateTime.Now;
 
-                    application.Status = StickerApplicationStatus.WaitingForApproval;
+                    if (((METUPrincipal)User).User.Category.CanApplyOnBehalfOf)
+                    {
+                        application.Status = StickerApplicationStatus.WaitingForPayment;
+                    }
+                    else
+                    {
+                        application.Status = StickerApplicationStatus.WaitingForApproval;
+                    }
+
                     application.Payment = null;
-                    application.Sticker = null;
 
                     User user = University.GetUser(((METUPrincipal)User).User.UID);
                     Quota quota = University.GetQuotaForUser(user, University.GetStickerType(application.SelectedType));
@@ -79,18 +142,22 @@ namespace METU.VRS.Controllers
                     application.User = user;
                     application.Quota = quota;
 
-                    application.Owner = new ApplicationOwner() { Name = user.Name };
-                    db.Users.Attach(user);
-                    db.Quotas.Attach(quota);
+                    if (!user.Category.CanApplyOnBehalfOf)
+                    {
+                        application.Owner = new ApplicationOwner() { Name = user.Name };
+                    }
+
+                    db.Users.Attach(application.User);
+                    db.Quotas.Attach(application.Quota);
                     db.StickerApplications.Add(application);
                     db.SaveChanges();
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { ok = "1" });
             }
             else
             {
-                return View();
+                return new EmptyResult();
             }
         }
 

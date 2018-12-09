@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace METU.VRS.Models
 {
@@ -8,6 +7,8 @@ namespace METU.VRS.Models
         [Key]
         public int FID { get; set; }
 
+        [Required]
+        [RegularExpression(@"\d{1,16}", ErrorMessage = "Serial number must be a number")]
         public int SerialNumber { get; set; }
 
         [Required]

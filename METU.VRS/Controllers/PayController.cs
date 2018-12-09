@@ -26,10 +26,11 @@ namespace METU.VRS.Controllers
         public ActionResult Index(int? Id)
         {
             Trace.WriteLine("GET /Pay/Index/" + Id.ToString());
-            if(null == Id)
+            if (null == Id)
             {
-                return RedirectToAction(null, "Sticker");
+                return RedirectToAction("Index", "Sticker");
             }
+
             using (DatabaseContext db = GetNewDBContext())
             {
                 var application = db.StickerApplications
@@ -53,7 +54,7 @@ namespace METU.VRS.Controllers
                 {
                     return new HttpUnauthorizedResult();
                 }
-                
+
                 return View(new PaymentRequest()
                 {
                     Application = application
@@ -112,7 +113,7 @@ namespace METU.VRS.Controllers
                 {
                     throw new Exception("Application could not be updated!!");
                 }
-                return RedirectToAction("Index", "Sticker", new {ok_msg = "Payment successful. Now please go to office for delivery."});
+                return RedirectToAction("Index", "Sticker", new { paymentok = "1" });
             }
         }
 
@@ -121,8 +122,14 @@ namespace METU.VRS.Controllers
         public ActionResult Fail(PaymentResponseFail resp)
         {
             Trace.WriteLine("POST /Pay/Fail");
-
-            return RedirectToAction("", "Pay", new { Id=resp.ApplicationId, err_msg = resp.ErrMsg });
+            if (resp != null && resp.ProcReturnCode == "51")
+            {
+                return RedirectToAction("Index", "Pay", new { Id = resp.ApplicationId, insufficientFunds = "1" });
+            }
+            else
+            {
+                return RedirectToAction("Index", "Pay", new { Id = resp.ApplicationId, hasError = "1" });
+            }
         }
     }
 }

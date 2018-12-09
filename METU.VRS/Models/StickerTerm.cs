@@ -9,9 +9,12 @@ namespace METU.VRS.Models
         public DateTime EndDate { get; set; }
         public TermTypes Type { get; set; }
 
-        public bool IsExpired()
+        public bool IsExpired
         {
-            return (EndDate <= DateTime.Today);
+            get
+            {
+                return (EndDate <= DateTime.Today);
+            }
         }
     }
 

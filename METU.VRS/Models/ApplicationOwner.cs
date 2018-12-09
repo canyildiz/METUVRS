@@ -9,6 +9,7 @@ namespace METU.VRS.Models
         public int ID { get; set; }
 
         [Display(Name = "Application Owner")]
+        [Required]
         public string Name { get; set; }
 
         public virtual StickerApplication Application { get; set; }

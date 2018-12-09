@@ -175,6 +175,7 @@
     <Compile Include="Models\CT\PaymentResponseSuccess.cs" />
     <Compile Include="Models\CT\PaymentRequest.cs" />
     <Compile Include="Models\CT\ApprovementOption.cs" />
+    <Compile Include="Models\Interface\ILastModified.cs" />
     <Compile Include="UI\FormsAuthAttribute.cs" />
     <Compile Include="Models\ApplicationOwner.cs" />
     <Compile Include="Models\Payment.cs" />

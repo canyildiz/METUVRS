@@ -27,13 +27,15 @@ namespace METU.VRS.Models.CT
 
         [Required]
         [Display(Name = "CVV")]
-        [RegularExpression("^[0-99]{3}$", ErrorMessage ="CVV must be 3 digit number, written on back side of your card")]
+        [RegularExpression("^[0-99]{3}$", ErrorMessage = "CVV must be 3 digit number, written on back side of your card")]
         public string cv2 { get; set; }
 
         private StickerApplication application;
-        public StickerApplication Application {
+        public StickerApplication Application
+        {
             get { return application; }
-            set {
+            set
+            {
                 application = value;
                 oid = application.ID + OID_DELIMITER + System.DateTime.Now.ToString();
             }
@@ -54,13 +56,14 @@ namespace METU.VRS.Models.CT
                 new ExpiryMonthOption() { Key="11", Value="November" },
                 new ExpiryMonthOption() { Key="12", Value="December" }
             };
-        public List<ExpiryYearOption> ExpiryYears() {
+        public List<ExpiryYearOption> ExpiryYears()
+        {
             List<ExpiryYearOption> retVal = new List<ExpiryYearOption>();
             int y = System.DateTime.Now.Year;
-            for (int i = 0; i<=20; i++)
+            for (int i = 0; i <= 20; i++)
             {
                 string yearVal = (y + i).ToString();
-                retVal.Add(new ExpiryYearOption() { Value = yearVal, Key = yearVal.Substring((yearVal.Length -2)) });
+                retVal.Add(new ExpiryYearOption() { Value = yearVal, Key = yearVal.Substring((yearVal.Length - 2)) });
             }
             return retVal;
         }

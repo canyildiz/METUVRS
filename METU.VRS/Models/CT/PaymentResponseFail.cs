@@ -5,6 +5,8 @@ namespace METU.VRS.Models.CT
 {
     public class PaymentResponseFail
     {
+        public string ProcReturnCode { get; set; }
+
         public string Response { get; set; }
 
         public string mdErrorMsg { get; set; }

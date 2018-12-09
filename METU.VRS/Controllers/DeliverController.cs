@@ -1,9 +1,7 @@
-﻿using METU.VRS.Controllers.Static;
-using METU.VRS.Models;
-using METU.VRS.Models.CT;
+﻿using METU.VRS.Models;
 using METU.VRS.Services;
-using METU.VRS.UI;
 using PagedList;
+using System;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
@@ -93,12 +91,17 @@ namespace METU.VRS.Controllers
         public ActionResult Deliver(int Id)
         {
             Trace.WriteLine("GET /Deliver/Deliver");
-            return new ViewResult();
+            using (DatabaseContext db = GetNewDBContext())
+            {
+                Sticker sticker = db.Stickers.Where(s => s.FID == Id).FirstOrDefault();
+                return View(sticker);
+            }
         }
 
         [HttpPost]
         [Authorize(Roles = "delivery_user")]
-        public ActionResult Deliver(int Id, int SerialNumber)
+        [ValidateAntiForgeryToken]
+        public ActionResult Deliver(int Id, Sticker sticker)
         {
             Trace.WriteLine("GET /Deliver/Deliver");
             using (DatabaseContext db = GetNewDBContext())
@@ -114,12 +117,26 @@ namespace METU.VRS.Controllers
                 {
                     throw new HttpAntiForgeryException("Application not found");
                 }
+                int userId = sticker.FID == 0 ? 0 : Convert.ToInt32(db.StickerApplications.Where(a => a.ID == sticker.FID).Select(a => a.User.ID).FirstOrDefault());
+                var count = db.Stickers.Where(s => s.SerialNumber == sticker.SerialNumber && s.Application.User.ID != userId).Count();
+                if (count > 0 || (sticker.SerialNumber == 0 && sticker.FID == 0))
+                {
+                    return RedirectToAction("Index", new { stickerInUse = "1" });
+                }
+                else
+                {
 
-                application.Sticker = new Sticker();
-                application.Sticker.SerialNumber = SerialNumber;
-                application.Status = StickerApplicationStatus.Active;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                    if (sticker.FID == 0)
+                    {
+                        application.Sticker = new Sticker { SerialNumber = sticker.SerialNumber };
+                    }
+
+                    application.Status = StickerApplicationStatus.Active;
+                    application.DeliveryDate = DateTime.Now;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
         }
 
@@ -143,6 +160,7 @@ namespace METU.VRS.Controllers
                 }
 
                 application.Status = StickerApplicationStatus.NotDelivered;
+                application.DeliveryDate = DateTime.Now;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

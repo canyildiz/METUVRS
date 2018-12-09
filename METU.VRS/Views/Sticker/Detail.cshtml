@@ -42,7 +42,16 @@
             </tr>
             <tr>
                 <td>@Html.LabelFor(m => m.Status)</td>
-                <td>@Model.Status.ToDescription()</td>
+                <td>
+                    @if (Model.Term.IsExpired)
+                    {
+                        @:Expired
+                    }
+                    else
+                    {
+                        @Model.Status.ToDescription()
+                    }
+                </td>
             </tr>
             <tr>
                 <td>@Html.LabelFor(m => m.CreateDate)</td>
@@ -57,7 +66,7 @@
             </tr>
             <tr>
                 <td>@Html.LabelFor(m => m.Payment.Amount) (TL)</td>
-                <td>@Maybe(@Model.Payment?.Amount, "Not Paid Yet")</td>
+                <td>@Maybe(Model.Payment?.Amount, $"{Model.Quota.StickerFee} (Not Paid Yet)")</td>
             </tr>
             <tr>
                 <td>@Html.Label("Sticker Term")</td>
