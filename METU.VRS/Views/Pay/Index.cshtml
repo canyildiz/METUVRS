@@ -1,0 +1,121 @@
+﻿@model METU.VRS.Models.CT.PaymentRequest
+
+@using METU.VRS.UI
+@using METU.VRS.Models
+@{
+    ViewBag.Title = "Sticker Application - Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h3>Sticker Application Payment</h3>
+@if (@Request.Params["err_msg"] != null)
+{
+    <div class="alert alert-danger">@Request.Params["err_msg"]</div>
+}
+@{
+    String domainName = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+    String amount = @Model.Application.Quota.StickerFee.ToString();
+    String clientId = "500200000";
+    String okUrl = domainName + "/Pay/Ok";
+    String failUrl = domainName + "/Pay/Fail";
+    String rnd = DateTime.Now.ToString();
+    String oid = @Model.oid;
+    String taksit = "";
+    String islemtipi = "Auth";
+    String storekey = "123456";
+    String hashstr = clientId + oid + amount + okUrl + failUrl + islemtipi + taksit + rnd + storekey;
+    System.Security.Cryptography.SHA1 sha = new System.Security.Cryptography.SHA1CryptoServiceProvider(); byte[] hashbytes = System.Text.Encoding.GetEncoding("ISO-8859-9").GetBytes(hashstr);
+    byte[] inputbytes = sha.ComputeHash(hashbytes);
+    String hash = Convert.ToBase64String(inputbytes);
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @action = "https://entegrasyon.asseco-see.com.tr/fim/est3Dgate" }))
+{
+    <div class="form-horizontal payment-form col-md-6">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Application.Quota.StickerFee, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Application.Quota.StickerFee, new { htmlAttributes = new { @class = "form-control text-right", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.Application.Quota.StickerFee, "", htmlAttributes: new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CardHolder, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.EditorFor(model => model.CardHolder, new { htmlAttributes = new { @class = "form-control", @Value = ((METUPrincipal)User).User.Name } })
+                @Html.ValidationMessageFor(model => model.CardHolder, "", htmlAttributes: new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.pan, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.EditorFor(model => model.pan, new { htmlAttributes = new { @Value = "4531444531442283", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.pan, "", htmlAttributes: new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="control-label col-md-3">Expiry Date</label>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.Ecom_Payment_Card_ExpDate_Month, new SelectList(Model.ExpiryMonths(), "Key", "Value"), htmlAttributes: new { @name = "Ecom_Payment_Card_ExpDate_Month", @class = "form-control dropdown" })
+            </div>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.Ecom_Payment_Card_ExpDate_Year, new SelectList(Model.ExpiryYears(), "Key", "Value"), htmlAttributes: new { @name = "Ecom_Payment_Card_ExpDate_Year", @class = "form-control dropdown" })
+            </div>
+            @Html.LabelFor(model => model.cv2, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.cv2, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.cv2, "", htmlAttributes: new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-3 col-md-10">
+                <input type="submit" value="Make Payment" class="btn btn-success" />
+                <a href="@Url.Action("", "Sticker")" class="btn btn-danger">Cancel</a>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="clientid" value="@clientId">
+    <input type="hidden" name="amount" value="@amount">
+    <input type="hidden" name="oid" value="@oid">
+    <input type="hidden" name="okUrl" value="@okUrl">
+    <input type="hidden" name="failUrl" value="@failUrl">
+    <input type="hidden" name="rnd" value="@rnd">
+    <input type="hidden" name="hash" value="@hash">
+    <input type="hidden" name="islemtipi" value="@islemtipi" />
+    <input type="hidden" name="taksit" value="@taksit" />
+    <input type="hidden" name="storetype" value="3d_pay">
+    <input type="hidden" name="lang" value="tr">
+    <input type="hidden" name="currency" value="949">
+    <input type="hidden" name="firmaadi" value="METU VRS">
+    <input type="hidden" name="Fismi" value="is">
+    <input type="hidden" name="faturaFirma" value="faturaFirma">
+    <input type="hidden" name="Fadres" value="XXX">
+    <input type="hidden" name="Fadres2" value="XXX">
+    <input type="hidden" name="Fil" value="XXX">
+    <input type="hidden" name="Filce" value="XXX">
+    <input type="hidden" name="Fpostakodu" value="postakod93013">
+    <input type="hidden" name="tel" value="XXX">
+    <input type="hidden" name="fulkekod" value="tr">
+    <input type="hidden" name="nakliyeFirma" value="na fi">
+    <input type="hidden" name="tismi" value="XXX">
+    <input type="hidden" name="tadres" value="XXX">
+    <input type="hidden" name="tadres2" value="XXX" />
+    <input type="hidden" name="til" value="XXX">
+    <input type="hidden" name="tilce" value="XXX">
+    <input type="hidden" name="tpostakodu" value="ttt postakod93013">
+    <input type="hidden" name="tulkekod" value="usa">
+    <input type="hidden" name="itemnumber1" value="a1">
+    <input type="hidden" name="productcode1" value="a2">
+    <input type="hidden" name="qty1" value="3">
+    <input type="hidden" name="desc1" value="a4 desc">
+    <input type="hidden" name="id1" value="a5">
+    <input type="hidden" name="price1" value="6.25">
+    <input type="hidden" name="total1" value="7.50">
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

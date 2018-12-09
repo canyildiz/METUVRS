@@ -18,6 +18,12 @@ textarea {
     max-width: 280px;
 }
 
+.payment-form input,
+.payment-form select,
+.payment-form textarea {
+    max-width: initial;
+}
+
     input.no-limit,
     select.no-limit,
     textarea.no-limit {

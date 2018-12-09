@@ -64,6 +64,7 @@ namespace METU.VRS.Migrations
                 if (Seed != null)
                 {
                     Seed.Invoke();
+                    Console.Out.WriteLine("Test database is seeded");
                 }
             }
         }
@@ -72,6 +73,7 @@ namespace METU.VRS.Migrations
         {
             cmd.CommandText = string.Format("CREATE DATABASE {0} ON (NAME = N'{0}', FILENAME = '{1}\\{0}.mdf')", DatabaseName, DataDirectory);
             cmd.ExecuteNonQuery();
+            Console.Out.WriteLine("A new test database is created");
         }
         private void DetachDatabase(SqlCommand cmd)
         {
@@ -104,10 +106,12 @@ namespace METU.VRS.Migrations
                 {
                     File.Delete($"{DataDirectory}\\{DatabaseName}_log.ldf");
                 }
+
+                Console.Out.WriteLine("Test database files are deleted");
             }
             catch
             {
-                Console.WriteLine("Could not delete the test database files");
+                Console.Out.WriteLine("Could not delete the test database files");
             }
         }
         private bool FindDatabase(SqlCommand cmd)

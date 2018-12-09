@@ -1,0 +1,86 @@
+﻿@model METU.VRS.Models.CT.PaymentRequest
+@using METU.VRS.Models
+@using METU.VRS.UI
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@helper Maybe(object obj, string ifNull = "")
+{
+    string text = "";
+    try { text = obj.ToString(); }
+    catch { }
+
+    if (!string.IsNullOrEmpty(text))
+    {
+        @text
+    }
+    else
+    {
+        @ifNull;
+    }
+}
+
+<h1>Sticker Payment Form</h1>
+
+@using (Html.BeginForm())
+{
+<div class="form-horizontal">
+    <h3>Payment Details</h3>
+    <hr />
+    <div class="form-group">
+        <label class="control-label col-md-2" for="amount">Amount</label>
+        <div class="col-md-10">
+            <input type="text" value="485.00" name="amount" id="amount" disabled="disabled" class="form-control text-right" />
+        </div>
+    </div>
+    <h3>Credit Card Information</h3>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <label class="control-label col-md-2" for="card_holder">Card Holder</label>
+        <div class="col-md-10">
+            <input type="text" name="card_holder" id="card_holder" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-2" for="card_number_1">Card Number</label>
+        <div class="col-md-1">
+            <input type="text" name="card_number_1" id="card_number_1" pattern="[0-9]{4}" class="form-control form-control-sm text-center" maxlength="4" />
+        </div>
+        <div class="col-md-1">
+            <input type="text" name="card_number_2" id="card_number_2" pattern="[0-9]{4}" class="form-control form-control-sm text-center" maxlength="4" />
+        </div>
+        <div class="col-md-1">
+            <input type="text" name="card_number_3" id="card_number_3" pattern="[0-9]{4}" class="form-control form-control-sm text-center" maxlength="4" />
+        </div>
+        <div class="col-md-1">
+            <input type="text" name="card_number_4" id="card_number_4" pattern="[0-9]{4}" class="form-control form-control-sm text-center" maxlength="4" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="expiry_month">Expiry Date</label>
+        <div class="col-md-2">
+            <div class="input-group ">
+                <input type="number" min="01" max="12" name="expiry_month" id="expiry_month" class="form-control" size="8" maxlength="2" />
+                <span class="input-group-addon">/</span>
+                <input type="number" min="2018" max="2032" name="expiry_year" id="expiry_year" class="form-control" size="8" maxlength="4" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-2" for="card_cvv">Card CVV</label>
+        <div class="col-md-1">
+            <input type="text" name="card_cvv" id="card_cvv" class="form-control text-center" maxlength="3" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Make Payment" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+

@@ -165,6 +165,14 @@
                     Vehicle = ve101
                 },
                  new StickerApplication(){
+                    User =e201,
+                    CreateDate = DateTime.Now,LastModified=DateTime.Now,
+                    Owner = new ApplicationOwner(){Name =e201.Name},
+                    Quota =q20,
+                    Status =StickerApplicationStatus.WaitingForPayment,
+                    Vehicle = ve201
+                },
+                 new StickerApplication(){
                     User =e102,
                     Payment=new Payment{Amount=q16.StickerFee,TransactionDate = DateTime.Now,TransactionNumber="TEST1234"},
                     CreateDate = DateTime.Now,LastModified=DateTime.Now,
