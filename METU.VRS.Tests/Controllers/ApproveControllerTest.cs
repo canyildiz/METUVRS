@@ -12,6 +12,7 @@ using System.Web.Routing;
 namespace METU.VRS.Tests.Controllers
 {
     [TestClass]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class ApproveControllerTest : ControllerTestBase
     {
         [TestMethod]

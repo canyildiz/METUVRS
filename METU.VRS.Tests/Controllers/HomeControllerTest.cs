@@ -6,6 +6,7 @@ using System.Web.Mvc;
 namespace METU.VRS.Tests.Controllers
 {
     [TestClass]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class HomeControllerTest
     {
         [AssemblyInitialize]

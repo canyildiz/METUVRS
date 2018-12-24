@@ -44,22 +44,22 @@ namespace METU.VRS.Controllers.Static
 
         public static UserRole GetRoleByUID(string UID)
         {
-            return userRoles.Where(u => u.UID == UID).FirstOrDefault();
+            return userRoles.FirstOrDefault(u => u.UID == UID);
         }
 
         public static UserCategory GetCategoryByUID(string UID)
         {
-            return userCategories.Where(u => u.UID == UID).FirstOrDefault();
+            return userCategories.FirstOrDefault(u => u.UID == UID);
         }
 
         public static BranchAffiliate GetBranchAffiliateByUID(string UID)
         {
-            return branchsAffiliates.Where(b => b.UID == UID).FirstOrDefault();
+            return branchsAffiliates.FirstOrDefault(b => b.UID == UID);
         }
 
         public static StickerType GetStickerType(string ID)
         {
-            return stickerTypes.Where(s => s.ID == Convert.ToInt32(ID)).FirstOrDefault();
+            return stickerTypes.FirstOrDefault(s => s.ID == Convert.ToInt32(ID));
         }
 
         public static StickerType[] GetStickerTypes(UserCategory userCategory)
@@ -69,7 +69,7 @@ namespace METU.VRS.Controllers.Static
 
         public static StickerTerm GetOngoingTerm(TermTypes termType)
         {
-            return stickerTerms.Where(s => s.Type == termType).FirstOrDefault();
+            return stickerTerms.FirstOrDefault(s => s.Type == termType);
         }
 
         public static Quota GetQuotaForTerm(StickerTerm term, BranchAffiliate division)

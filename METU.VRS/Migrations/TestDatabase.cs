@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace METU.VRS.Migrations
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class TestDatabase
     {
         private readonly string LocalDbMaster = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True";
@@ -90,7 +91,7 @@ namespace METU.VRS.Migrations
             }
             else
             {
-                throw new Exception($"--Couldn't detach the database from {attachedDB}--");
+                throw new ArgumentException($"--Couldn't detach the database from {attachedDB}--");
             }
         }
         private void CleanupDatabase()

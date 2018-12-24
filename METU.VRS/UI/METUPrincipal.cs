@@ -9,9 +9,10 @@ using System.Web.Security;
 
 namespace METU.VRS.UI
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class METUPrincipal : ClaimsPrincipal
     {
-        private IIdentity formsIdentity;
+        private readonly IIdentity formsIdentity;
 
         public METUPrincipal()
         {
@@ -33,7 +34,7 @@ namespace METU.VRS.UI
 
         public override bool IsInRole(string role)
         {
-            return (User.Roles.Where(r => r.UID == role).FirstOrDefault() != null);
+            return (User.Roles.FirstOrDefault(r => r.UID == role) != null);
         }
     }
 }

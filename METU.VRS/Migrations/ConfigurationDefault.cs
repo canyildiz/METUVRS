@@ -4,6 +4,7 @@
     using System;
     using System.Data.Entity.Migrations;
 
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class ConfigurationDefault : DbMigrationsConfiguration<METU.VRS.Services.DatabaseContext>
     {
         public ConfigurationDefault()
@@ -20,7 +21,7 @@
             UserRole security_officer = new UserRole() { UID = "security_officer", Description = "Security Officer" };
             UserRole admin = new UserRole() { UID = "admin", Description = "System Admin" };
 
-            context.UserRoles.AddOrUpdate(a => a.UID, new UserRole[] { authenticated_user, approval_user, delivery_user, security_officer });
+            context.UserRoles.AddOrUpdate(a => a.UID, new UserRole[] { authenticated_user, approval_user, delivery_user, security_officer, admin });
 
 
             //UserCategory

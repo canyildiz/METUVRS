@@ -11,6 +11,7 @@ using System.Web.Routing;
 namespace METU.VRS.Tests.Controllers
 {
     [TestClass]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class DeliverControllerTest : ControllerTestBase
     {
         [TestMethod]
@@ -109,7 +110,7 @@ namespace METU.VRS.Tests.Controllers
 
             //deliver
             StickerApplication stickerApplication = model.FirstOrDefault();
-            controller.Deliver(stickerApplication.ID, 123456);
+            controller.Deliver(stickerApplication.ID);
 
             //get list
             result = controller.Index("", "", "Test Student13", 1) as ViewResult;

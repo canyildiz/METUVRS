@@ -5,6 +5,7 @@ using System.Web;
 
 namespace METU.VRS.Tests.Controllers
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class ControllerTestBase
     {
         protected Mock<HttpContextBase> MockAuthContext(User mockUser)
