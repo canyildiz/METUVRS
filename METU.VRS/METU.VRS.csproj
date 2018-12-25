@@ -206,7 +206,6 @@
     <Compile Include="Services\LDAPResult.cs" />
     <Compile Include="UI\METUPrincipal.cs" />
     <Compile Include="UI\Util.cs" />
-    <Compile Include="UI\WebSessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\placeholder.txt" />

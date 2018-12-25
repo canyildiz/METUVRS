@@ -2,7 +2,8 @@
 
 namespace METU.VRS.UI
 {
-    public class FilterConfig
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public static class FilterConfig
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {

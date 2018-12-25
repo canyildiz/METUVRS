@@ -51,7 +51,7 @@ namespace METU.VRS.Models
         {
             if (Status != StickerApplicationStatus.WaitingForApproval)
             {
-                return null;
+                return new List<ApprovementOption>();
             }
             else
             {

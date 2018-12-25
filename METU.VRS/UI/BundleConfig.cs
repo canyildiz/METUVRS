@@ -2,7 +2,8 @@
 
 namespace METU.VRS.UI
 {
-    public class BundleConfig
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public static class BundleConfig
     {
         public static void RegisterBundles(BundleCollection bundles)
         {

@@ -1,4 +1,6 @@
 ﻿# METU VRS
+![](https://sonarcloud.io/api/project_badges/measure?project=alatas_METUVRS&metric=sqale_rating) ![](https://sonarcloud.io/api/project_badges/measure?project=alatas_METUVRS&metric=ncloc) ![](https://sonarcloud.io/api/project_badges/measure?project=alatas_METUVRS&metric=coverage)
+
 Middle East Technical University Vehicle Registration System
 
 This project is created for the SM504 Team Software Project course.
@@ -49,3 +51,8 @@ All test accounts’ passwords are equal to its login id.
 
 ## Payment Specification
 In the payment page, 3D Secure payment api provided by Asseco SEE is used. Example credit card numbers could be used for testing
+
+## Static Code Analysis
+The static code analysis is made in [SonarQube®](https://www.sonarqube.org) which is an automatic code review tool to detect bugs, vulnerabilities and code smells in the source code.
+
+![](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)

@@ -33,7 +33,7 @@ namespace METU.VRS.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            IQueryable<StickerApplication> applications = null; ;
+            IQueryable<StickerApplication> applications = null;
 
             using (DatabaseContext db = GetNewDBContext())
             {

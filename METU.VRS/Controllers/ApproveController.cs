@@ -36,7 +36,7 @@ namespace METU.VRS.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            IQueryable<StickerApplication> applications = null; ;
+            IQueryable<StickerApplication> applications = null;
 
             using (DatabaseContext db = GetNewDBContext())
             {
@@ -114,7 +114,7 @@ namespace METU.VRS.Controllers
                     throw new HttpAntiForgeryException();
                 }
 
-                ApprovementOption approvementOption = application.GetApprovementOptions().Where(a => a.QuotaID == QuotaID).FirstOrDefault();
+                ApprovementOption approvementOption = application.GetApprovementOptions().FirstOrDefault(a => a.QuotaID == QuotaID);
                 if (approvementOption == null)
                 {
                     throw new HttpAntiForgeryException();

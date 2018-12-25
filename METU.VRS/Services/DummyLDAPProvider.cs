@@ -28,22 +28,22 @@ namespace METU.VRS.Services
             { "cati", new string[] { "Test Affiliate4", "affiliate","CATI" } },
         };
 
-        public LDAPResult Login(string loginId, string password)
+        public LDAPResult Login(string username, string password)
         {
-            if (password != loginId || !testLogins.ContainsKey(loginId))
+            if (password != username || !testLogins.ContainsKey(username))
             {
                 return new LDAPResult
                 {
-                    UID = loginId,
+                    UID = username,
                     Result = false
                 };
             }
             else
             {
-                var testLogin = testLogins[loginId];
+                var testLogin = testLogins[username];
                 return new LDAPResult()
                 {
-                    UID = loginId,
+                    UID = username,
                     CN = testLogin[0],
                     DC = testLogin[1],
                     OU = testLogin[2],

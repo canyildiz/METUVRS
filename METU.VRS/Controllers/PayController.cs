@@ -104,14 +104,14 @@ namespace METU.VRS.Controllers
                 db.Payments.Add(p);
                 if (db.SaveChanges() == 0)
                 {
-                    throw new Exception("Payment could not be saved!!");
+                    throw new InvalidOperationException("Payment could not be saved!!");
                 }
 
                 application.Status = Models.StickerApplicationStatus.WaitingForDelivery;
                 application.LastModified = DateTime.Now;
                 if (db.SaveChanges() == 0)
                 {
-                    throw new Exception("Application could not be updated!!");
+                    throw new InvalidOperationException("Application could not be updated!!");
                 }
                 return RedirectToAction("Index", "Sticker", new { paymentok = "1" });
             }
@@ -126,9 +126,13 @@ namespace METU.VRS.Controllers
             {
                 return RedirectToAction("Index", "Pay", new { Id = resp.ApplicationId, insufficientFunds = "1" });
             }
-            else
+            else if (resp != null)
             {
                 return RedirectToAction("Index", "Pay", new { Id = resp.ApplicationId, hasError = "1" });
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
             }
         }
     }
