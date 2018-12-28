@@ -138,9 +138,39 @@
             Vehicle ve202 = new Vehicle { OwnerName = e202.Name, PlateNumber = "06AA202", RegistrationNumber = "AA202000", Type = VehicleType.Car };
             Vehicle ve103 = new Vehicle { OwnerName = e102.Name, PlateNumber = "06AA103", RegistrationNumber = "AA103000", Type = VehicleType.Car };
             Vehicle ve203 = new Vehicle { OwnerName = e202.Name, PlateNumber = "06AA203", RegistrationNumber = "AA203000", Type = VehicleType.Car };
+            Vehicle vevisitor1 = new Vehicle { OwnerName = "Test Visitor1", PlateNumber = "06BB100", RegistrationNumber = "BB100000", Type = VehicleType.Car };
+            Vehicle vevisitor2 = new Vehicle { OwnerName = "Test Visitor2", PlateNumber = "06BB200", RegistrationNumber = "BB200000", Type = VehicleType.Van };
+
 
             context.Vehicles.AddOrUpdate(v => v.ID, new Vehicle[] { ve100, ve200, ve101, ve201, ve102, ve202, ve103, ve203 });
 
+            context.Visitors.AddOrUpdate(v => v.UID, new Visitor[] {
+                new Visitor {
+                    CreateDate=DateTime.Now,
+                    Description="Testing Purpose",
+                    Email = "test@example.com",
+                    LastModified = DateTime.Now,
+                    Name ="John Doe",
+                    Status = VisitorStatus.WaitingForApproval,
+                    User = e101,
+                    Vehicle = vevisitor1,
+                    VisitDate = DateTime.Today,
+                    UID="TEST1"
+                },
+                new Visitor {
+                    CreateDate=DateTime.Now,
+                    Description="Testing Purpose",
+                    Email = "test@example.com",
+                    LastModified = DateTime.Now,
+                    Name ="Jane Doe",
+                    Status = VisitorStatus.WaitingForArrival,
+                    User = e101,
+                    Vehicle = vevisitor2,
+                    VisitDate = DateTime.Today,
+                    UID="TEST2",
+                    ApproveDate=DateTime.Now
+                }
+            });
 
             context.StickerApplications.AddOrUpdate(a => a.ID, new StickerApplication[]
             {

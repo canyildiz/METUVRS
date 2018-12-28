@@ -11,6 +11,19 @@ namespace METU.VRS.UI
             return ToDescription((Enum)(object)EnumValue);
         }
 
+        public static string ToDescription<TEnum>(this TEnum? EnumValue) where TEnum : struct
+        {
+            if (EnumValue.HasValue)
+            {
+                return ToDescription((Enum)(object)EnumValue);
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+
         public static string ToDescription(Enum value)
         {
             FieldInfo fi = value.GetType().GetField(value.ToString());

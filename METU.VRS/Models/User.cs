@@ -1,6 +1,7 @@
 ﻿using METU.VRS.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace METU.VRS.Models
@@ -9,6 +10,9 @@ namespace METU.VRS.Models
     {
         public int ID { get; set; }
 
+        [Required]
+        [Display(Name = "User Name")]
+        [MaxLength(30)]
         public string UID { get; set; }
 
         public string Name { get; set; }
