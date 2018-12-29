@@ -1,7 +1,9 @@
 ﻿using METU.VRS.Models;
 using METU.VRS.Services;
+using PagedList;
 using System;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -21,6 +23,7 @@ namespace METU.VRS.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            Trace.WriteLine("GET /Visitor/Index");
             return View();
         }
 
@@ -28,6 +31,7 @@ namespace METU.VRS.Controllers
         [HttpGet]
         public ActionResult Apply()
         {
+            Trace.WriteLine("GET /Visitor/Apply");
             return View(new Visitor());
         }
 
@@ -36,6 +40,7 @@ namespace METU.VRS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Apply(Visitor visitor)
         {
+            Trace.WriteLine("POST /Visitor/Apply");
             if (ModelState.IsValid)
             {
                 try
@@ -43,7 +48,7 @@ namespace METU.VRS.Controllers
                     using (DatabaseContext db = GetNewDBContext())
                     {
                         StickerApplication application = db.StickerApplications.
-                            FirstOrDefault(s => s.Status == StickerApplicationStatus.Active && 
+                            FirstOrDefault(s => s.Status == StickerApplicationStatus.Active &&
                             s.Vehicle.PlateNumber == visitor.Vehicle.PlateNumber);
 
                         if (application != null)
@@ -103,6 +108,7 @@ namespace METU.VRS.Controllers
         [HttpGet]
         public ActionResult Detail(string UID)
         {
+            Trace.WriteLine("GET /Visitor/Detail");
             using (DatabaseContext db = GetNewDBContext())
             {
                 Visitor visitor = db.Visitors.
@@ -118,6 +124,118 @@ namespace METU.VRS.Controllers
                 {
                     return View(visitor);
                 }
+            }
+        }
+
+        [HttpGet]
+        public ActionResult List(string sortOrder, string currentFilter, string searchString, int? page)
+        {
+            Trace.WriteLine("GET /Visitor/List");
+
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.PlateSortParm = sortOrder == "Plate" ? "plate_desc" : "Plate";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            IQueryable<Visitor> visitors = null;
+
+            using (DatabaseContext db = GetNewDBContext())
+            {
+                visitors = db.Visitors
+                    .AsNoTracking()
+                    .Include(a => a.Vehicle)
+                    .Include(a => a.User)
+                    .Where(a => a.User.UID == User.Identity.Name);
+
+
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    visitors = visitors.Where(a =>
+                    a.Name.Equals(searchString)
+                    || a.Email.Contains(searchString)
+                    || a.Description.Contains(searchString)
+                    || a.Vehicle.PlateNumber.Contains(searchString)
+                    || a.Vehicle.RegistrationNumber.Contains(searchString)
+                    || a.Vehicle.OwnerName.Contains(searchString));
+                }
+
+                switch (sortOrder)
+                {
+                    case "name_desc":
+                        visitors = visitors.OrderByDescending(v => v.Name);
+                        break;
+                    case "Date":
+                        visitors = visitors.OrderBy(v => v.VisitDate);
+                        break;
+                    case "date_desc":
+                        visitors = visitors.OrderByDescending(v => v.VisitDate);
+                        break;
+                    case "Plate":
+                        visitors = visitors.OrderBy(v => v.Vehicle.PlateNumber);
+                        break;
+                    case "plate_desc":
+                        visitors = visitors.OrderByDescending(v => v.Vehicle.PlateNumber);
+                        break;
+                    default:
+                        visitors = visitors.OrderBy(v => v.Status).OrderBy(v => v.LastModified);
+                        break;
+                }
+
+                int pageSize = 10;
+                int pageNumber = (page ?? 1);
+                return View(visitors.ToPagedList(pageNumber, pageSize));
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Approve(int Id)
+        {
+            Trace.WriteLine("GET /Visitor/Approve");
+            return SetVisitorStatus(Id, true);
+        }
+
+        [HttpGet]
+        public ActionResult Reject(int Id)
+        {
+            Trace.WriteLine("GET /Visitor/Reject");
+            return SetVisitorStatus(Id, false);
+        }
+
+
+        private ActionResult SetVisitorStatus(int Id, bool approve)
+        {
+            using (DatabaseContext db = GetNewDBContext())
+            {
+                var visitor = db.Visitors
+                    .Include(v => v.User)
+                    .Include(v => v.Vehicle)
+                    .FirstOrDefault(v => v.ID == Id);
+
+                if (visitor == null)
+                {
+                    throw new HttpAntiForgeryException("Visitor not found");
+                }
+
+                if (visitor.User.UID != User.Identity.Name)
+                {
+                    throw new HttpAntiForgeryException();
+                }
+
+                visitor.Status = approve ? VisitorStatus.WaitingForArrival : VisitorStatus.Rejected;
+                visitor.ApproveDate = DateTime.Now;
+                db.SaveChanges();
+                return RedirectToAction("List");
             }
         }
     }

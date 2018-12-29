@@ -55,10 +55,7 @@ namespace METU.VRS.Controllers
                     return new HttpUnauthorizedResult();
                 }
 
-                return View(new PaymentRequest()
-                {
-                    Application = application
-                });
+                return View(new PaymentRequest(application));
             }
         }
 

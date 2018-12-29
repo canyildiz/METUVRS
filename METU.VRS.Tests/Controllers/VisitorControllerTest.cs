@@ -1,8 +1,12 @@
 ﻿using METU.VRS.Controllers;
+using METU.VRS.Controllers.Static;
 using METU.VRS.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PagedList;
 using System;
+using System.Linq;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace METU.VRS.Tests.Controllers
 {
@@ -138,5 +142,113 @@ namespace METU.VRS.Tests.Controllers
             Assert.AreEqual(404, actionResult.StatusCode);
         }
 
+        [TestMethod]
+        public void ApproveThenDetail()
+        {
+            var mockUser = University.GetUser("e101");
+
+            VisitorController vc = new VisitorController();
+            vc.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), vc);
+
+            ViewResult actionResult = vc.Detail("TEST1") as ViewResult;
+            Assert.IsNotNull(actionResult);
+            Assert.IsInstanceOfType(actionResult.Model, typeof(Visitor));
+            Visitor model = actionResult.Model as Visitor;
+            Assert.AreEqual(VisitorStatus.WaitingForApproval, model.Status);
+
+            RedirectToRouteResult actionResult2 = vc.Approve(model.ID) as RedirectToRouteResult;
+            Assert.AreEqual("List", actionResult2.RouteValues["action"]);
+
+            ViewResult actionResult3 = vc.Detail("TEST1") as ViewResult;
+            Assert.IsNotNull(actionResult3);
+            Assert.IsInstanceOfType(actionResult3.Model, typeof(Visitor));
+            Visitor model2 = actionResult3.Model as Visitor;
+            Assert.AreEqual(VisitorStatus.WaitingForArrival, model2.Status);
+            Assert.IsNotNull(model2.ApproveDate);
+        }
+
+        [TestMethod]
+        public void RejectThenDetail()
+        {
+            var mockUser = University.GetUser("e101");
+
+            VisitorController vc = new VisitorController();
+            vc.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), vc);
+
+            ViewResult actionResult = vc.Detail("TEST1") as ViewResult;
+            Assert.IsNotNull(actionResult);
+            Assert.IsInstanceOfType(actionResult.Model, typeof(Visitor));
+            Visitor model = actionResult.Model as Visitor;
+            Assert.AreEqual(VisitorStatus.WaitingForApproval, model.Status);
+
+            RedirectToRouteResult actionResult2 = vc.Reject(model.ID) as RedirectToRouteResult;
+            Assert.AreEqual("List", actionResult2.RouteValues["action"]);
+
+            ViewResult actionResult3 = vc.Detail("TEST1") as ViewResult;
+            Assert.IsNotNull(actionResult3);
+            Assert.IsInstanceOfType(actionResult3.Model, typeof(Visitor));
+            Visitor model2 = actionResult3.Model as Visitor;
+            Assert.AreEqual(VisitorStatus.Rejected, model2.Status);
+            Assert.IsNotNull(model2.ApproveDate);
+        }
+
+        [TestMethod]
+        public void ApproveWithAnotherUserAuth()
+        {
+            var mockUser = University.GetUser("e100");
+
+            VisitorController vc = new VisitorController();
+            vc.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), vc);
+
+            ViewResult actionResult = vc.Detail("TEST1") as ViewResult;
+            Assert.IsNotNull(actionResult);
+            Assert.IsInstanceOfType(actionResult.Model, typeof(Visitor));
+            Visitor model = actionResult.Model as Visitor;
+            Assert.AreEqual(VisitorStatus.WaitingForApproval, model.Status);
+            Assert.ThrowsException<HttpAntiForgeryException>(() => vc.Approve(model.ID));
+        }
+
+        [TestMethod]
+        public void ApproveMissingVisitor()
+        {
+            var mockUser = University.GetUser("e100");
+
+            VisitorController vc = new VisitorController();
+            vc.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), vc);
+            Assert.ThrowsException<HttpAntiForgeryException>(() => vc.Approve(999));
+        }
+
+        [TestMethod]
+        public void List()
+        {
+            var mockUser = University.GetUser("e101");
+
+            VisitorController vc = new VisitorController();
+            vc.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), vc);
+
+            ViewResult actionResult = vc.List("", "", "", 1) as ViewResult;
+            Assert.IsNotNull(actionResult);
+            Assert.IsInstanceOfType(actionResult.Model, typeof(PagedList<Visitor>));
+            PagedList<Visitor> visitors = actionResult.Model as PagedList<Visitor>;
+            Assert.AreEqual(2, visitors.Count);
+
+            actionResult = vc.List("name_desc", "", "John Doe", 1) as ViewResult;
+            Assert.IsNotNull(actionResult);
+            Assert.IsInstanceOfType(actionResult.Model, typeof(PagedList<Visitor>));
+            visitors = actionResult.Model as PagedList<Visitor>;
+            Assert.AreEqual(1, visitors.Count);
+            Visitor visitor = visitors.FirstOrDefault();
+
+            Assert.AreEqual(VisitorStatus.WaitingForApproval, visitor.Status);
+
+            actionResult = vc.List("date_desc", "", "Jane Doe", 2) as ViewResult;
+            Assert.IsNotNull(actionResult);
+            Assert.IsInstanceOfType(actionResult.Model, typeof(PagedList<Visitor>));
+            visitors = actionResult.Model as PagedList<Visitor>;
+            Assert.AreEqual(1, visitors.Count);
+            visitor = visitors.FirstOrDefault();
+
+            Assert.AreEqual(VisitorStatus.WaitingForArrival, visitor.Status);
+        }
     }
 }

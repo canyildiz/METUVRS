@@ -276,6 +276,7 @@
     <Content Include="Views\Deliver\Deliver.cshtml" />
     <Content Include="Views\Pay\Index.cshtml" />
     <Content Include="Views\Visitor\Detail.cshtml" />
+    <Content Include="Views\Visitor\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

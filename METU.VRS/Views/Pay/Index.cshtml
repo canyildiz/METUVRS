@@ -65,10 +65,10 @@
         <div class="form-group">
             <label for="" class="control-label col-md-3">Expiry Date</label>
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.Ecom_Payment_Card_ExpDate_Month, new SelectList(Model.ExpiryMonths(), "Key", "Value"), htmlAttributes: new { @name = "Ecom_Payment_Card_ExpDate_Month", @class = "form-control dropdown" })
+                @Html.DropDownListFor(model => model.Ecom_Payment_Card_ExpDate_Month, new SelectList(Model.ExpiryMonths, "Key", "Value"), htmlAttributes: new { @name = "Ecom_Payment_Card_ExpDate_Month", @class = "form-control dropdown" })
             </div>
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.Ecom_Payment_Card_ExpDate_Year, new SelectList(Model.ExpiryYears(), "Key", "Value"), htmlAttributes: new { @name = "Ecom_Payment_Card_ExpDate_Year", @class = "form-control dropdown" })
+                @Html.DropDownListFor(model => model.Ecom_Payment_Card_ExpDate_Year, new SelectList(Model.ExpiryYears, "Key", "Value"), htmlAttributes: new { @name = "Ecom_Payment_Card_ExpDate_Year", @class = "form-control dropdown" })
             </div>
             <div class="col-md-8 col-md-offset-3">
                 <span class="text-danger" id="ExpDateMsg"></span>

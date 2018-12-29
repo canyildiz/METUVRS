@@ -3,100 +3,143 @@
 @using METU.VRS.UI
 @{
     ViewBag.Title = "Visitor Detail";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool Inline = Request.QueryString["inline"] == "1";
+    if (Inline)
+    {
+        Layout = null;
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}
+@if (!Inline)
+{
+    <h2>Visit Details</h2>
+    if (Request.Params["success"] != null && Request.UrlReferrer?.Host == Request.Url.Host)
+    {
+        <div class="alert alert-success">Your visit request is saved and waiting for approval from @Model.User.Name<br />Please, note the address of that page to check your application status.</div>
+    }
+
+    @detail()
+
+}
+else
+{
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Visit Details #@Model.ID</h4>
+    </div>
+    <div class="modal-body">
+        @detail()
+        @if (Model.Status == VisitorStatus.WaitingForApproval && Model.User.UID == User.Identity.Name)
+        {
+            <div class="modal-footer">
+                <a class="btn btn-default btn-success" href="@Url.Action("Approve", "Visitor", new { Id = Model.ID })"><i class="fa fa-check-circle-o"></i> Approve Visitor</a>
+                <a class="btn btn-default btn-danger" href="@Url.Action("Reject", "Visitor", new { Id = Model.ID })"><i class="fa fa-close"></i> Reject Visitor</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        }
+        else
+        {
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        }
+    </div>
 }
 
-<h2>Visit Details</h2>
-@if (Request.Params["success"] != null && Request.UrlReferrer?.Host == Request.Url.Host)
-{
-    <div class="alert alert-success">Your visit request is saved and waiting for approval from @Model.User.Name<br />Please, note the address of that page to check your application status.</div>
+
+
+@helper detail()
+{<div class="row">
+        <div class="col-md-4">
+            <h3>Application Details</h3>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.Label("Application Id", htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        #@Html.DisplayFor(model => model.ID)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        @Model.Status.ToDescription()
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LastModified, htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        @Model.LastModified.ToString("dd MMMM yyyy, dddd")
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h3>Visitor Details</h3>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.Name)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.Email)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Visitee's Name", htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.User.Name)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.VisitDate, htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.VisitDate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.Description)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h3>Vehicle Information</h3>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Vehicle.Type, htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        @Model.Vehicle.Type.ToDescription()
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Vehicle.OwnerName, htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.Vehicle.OwnerName)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Vehicle.PlateNumber, htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.Vehicle.PlateNumber)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Vehicle.RegistrationNumber, htmlAttributes: new { @class = "col-md-5" })
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.Vehicle.RegistrationNumber)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
-<div class="row">
-    <div class="col-md-4">
-        <h3>Application Details</h3>
-        <div class="form-horizontal">
-            <div class="form-group">
-                @Html.Label("Application Id", htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    #@Html.DisplayFor(model => model.ID)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    @Model.Status.ToDescription()
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.LastModified, htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    @Model.LastModified.ToString("dd MMMM yyyy, dddd")
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <h3>Visitor Details</h3>
-        <div class="form-horizontal">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    @Html.DisplayFor(model => model.Name)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    @Html.DisplayFor(model => model.Email)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Label("Visitee's Name", htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    @Html.DisplayFor(model => model.User.Name)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.VisitDate, htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    @Html.DisplayFor(model => model.VisitDate)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    @Html.DisplayFor(model => model.Description)
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <h3>Vehicle Information</h3>
-        <div class="form-horizontal">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Vehicle.Type, htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    @Model.Vehicle.Type.ToDescription()
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Vehicle.OwnerName, htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    @Html.DisplayFor(model => model.Vehicle.OwnerName)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Vehicle.PlateNumber, htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    @Html.DisplayFor(model => model.Vehicle.PlateNumber)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Vehicle.RegistrationNumber, htmlAttributes: new { @class = "col-md-5" })
-                <div class="col-md-7">
-                    @Html.DisplayFor(model => model.Vehicle.RegistrationNumber)
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+

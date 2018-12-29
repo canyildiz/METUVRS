@@ -12,6 +12,11 @@
             AutomaticMigrationsEnabled = false;
         }
 
+        public void SeedDB(METU.VRS.Services.DatabaseContext context)
+        {
+            Seed(context);
+        }
+
         protected override void Seed(METU.VRS.Services.DatabaseContext context)
         {
             //UserRole

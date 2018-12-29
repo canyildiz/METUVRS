@@ -30,18 +30,12 @@ namespace METU.VRS.Models.CT
         [RegularExpression("^[0-99]{3}$", ErrorMessage = "CVV must be 3 digit number, written on back side of your card")]
         public string cv2 { get; set; }
 
-        private StickerApplication application;
-        public StickerApplication Application
-        {
-            get { return application; }
-            set
-            {
-                application = value;
-                oid = application.ID + OID_DELIMITER + System.DateTime.Now.ToString();
-            }
-        }
 
-        public List<ExpiryMonthOption> ExpiryMonths() => new List<ExpiryMonthOption>
+        public PaymentRequest(StickerApplication application)
+        {
+            Application = application;
+
+            ExpiryMonths = new List<ExpiryMonthOption>
             {
                 new ExpiryMonthOption() { Key="01", Value="January" },
                 new ExpiryMonthOption() { Key="02", Value="February" },
@@ -56,17 +50,33 @@ namespace METU.VRS.Models.CT
                 new ExpiryMonthOption() { Key="11", Value="November" },
                 new ExpiryMonthOption() { Key="12", Value="December" }
             };
-        public List<ExpiryYearOption> ExpiryYears()
-        {
-            List<ExpiryYearOption> retVal = new List<ExpiryYearOption>();
+
+            ExpiryYears = new List<ExpiryYearOption>();
             int y = System.DateTime.Now.Year;
             for (int i = 0; i <= 20; i++)
             {
                 string yearVal = (y + i).ToString();
-                retVal.Add(new ExpiryYearOption() { Value = yearVal, Key = yearVal.Substring((yearVal.Length - 2)) });
+                ExpiryYears.Add(new ExpiryYearOption() { Value = yearVal, Key = yearVal.Substring(2) });
             }
-            return retVal;
         }
+
+        private StickerApplication application;
+        public StickerApplication Application
+        {
+            get
+            {
+                return application;
+            }
+            set
+            {
+                application = value;
+                oid = application.ID + OID_DELIMITER + System.DateTime.Now.ToString();
+            }
+        }
+
+        public List<ExpiryMonthOption> ExpiryMonths;
+        public List<ExpiryYearOption> ExpiryYears;
+
         public class ExpiryMonthOption
         {
             public string Key { get; set; }

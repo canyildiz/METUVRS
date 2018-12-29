@@ -20,7 +20,7 @@ namespace METU.VRS.Migrations
             DataDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         }
 
-        public static void InitTestDatase()
+        public static void InitTestDatabase()
         {
             var testDatabase = new Migrations.TestDatabase();
             testDatabase.CreateOrRefreshDatabase(Seed: () =>
@@ -29,6 +29,20 @@ namespace METU.VRS.Migrations
                 var dbContext = new DatabaseContext();
                 migrate.InitializeDatabase(dbContext);
             });
+            testDatabase.SetAppDomainDataDirectory();
+
+        }
+
+        public static void WipeTestDatabase()
+        {
+            var testDatabase = new Migrations.TestDatabase();
+            testDatabase.WipeDatabase(Seed: () =>
+             {
+                 var migrate = new Migrations.ConfigurationDefault();
+                 var dbContext = new DatabaseContext();
+                 migrate.SeedDB(dbContext);
+                 dbContext.SaveChanges();
+             });
             testDatabase.SetAppDomainDataDirectory();
 
         }
@@ -59,8 +73,38 @@ namespace METU.VRS.Migrations
                     }
                 }
 
-                CleanupDatabase();
+                CleanupDatabaseFiles();
                 CreateNewDatabase(cmd);
+
+                if (Seed != null)
+                {
+                    Seed.Invoke();
+                    Console.Out.WriteLine("Test database is seeded");
+                }
+            }
+        }
+
+        public void WipeDatabase(Action Seed = null)
+        {
+            using (var connection = new SqlConnection(LocalDbMaster))
+            {
+                connection.Open();
+                var cmd = connection.CreateCommand();
+                cmd.CommandTimeout = 5;
+
+                if (FindDatabase(cmd))
+                {
+                    try
+                    {
+                        WipeDatabase(cmd);
+                        Console.Out.WriteLine("Test database is wiped");
+                    }
+                    catch
+                    {
+                        Console.Out.WriteLine("Couldn't wiped the db");
+                        return;
+                    }
+                }
 
                 if (Seed != null)
                 {
@@ -91,10 +135,39 @@ namespace METU.VRS.Migrations
             }
             else
             {
-                throw new ArgumentException($"--Couldn't detach the database from {attachedDB}--");
+                Console.Out.WriteLine($"--Couldn't detach the database from {attachedDB}--");
             }
+
+            WipeDatabase(cmd);
         }
-        private void CleanupDatabase()
+
+        private void WipeDatabase(SqlCommand cmd)
+        {
+            cmd.CommandText = $@"
+                    USE {DatabaseName};
+                    SET QUOTED_IDENTIFIER ON;
+                    EXEC sp_MSforeachtable 'SET QUOTED_IDENTIFIER ON; ALTER TABLE ? NOCHECK CONSTRAINT ALL'  
+                    EXEC sp_MSforeachtable 'SET QUOTED_IDENTIFIER ON; ALTER TABLE ? DISABLE TRIGGER ALL'  
+                    EXEC sp_MSforeachtable 'SET QUOTED_IDENTIFIER ON; DELETE FROM ?'  
+                    EXEC sp_MSforeachtable 'SET QUOTED_IDENTIFIER ON; ALTER TABLE ? CHECK CONSTRAINT ALL'  
+                    EXEC sp_MSforeachtable 'SET QUOTED_IDENTIFIER ON; ALTER TABLE ? ENABLE TRIGGER ALL' 
+                    EXEC sp_MSforeachtable 'SET QUOTED_IDENTIFIER ON;
+                    
+                    IF NOT EXISTS (
+                        SELECT
+                            *
+                        FROM
+                            SYS.IDENTITY_COLUMNS
+                            JOIN SYS.TABLES ON SYS.IDENTITY_COLUMNS.Object_ID = SYS.TABLES.Object_ID
+                        WHERE
+                            SYS.TABLES.Object_ID = OBJECT_ID(''?'') AND SYS.IDENTITY_COLUMNS.Last_Value IS NULL
+                    )
+                    AND OBJECTPROPERTY( OBJECT_ID(''?''), ''TableHasIdentity'' ) = 1
+                    
+                        DBCC CHECKIDENT (''?'', RESEED, 0) WITH NO_INFOMSGS'";
+            cmd.ExecuteNonQuery();
+        }
+        private void CleanupDatabaseFiles()
         {
             try
             {
