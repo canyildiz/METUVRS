@@ -65,6 +65,31 @@ namespace METU.VRS.Tests.Controllers
         }
 
         [TestMethod]
+        public void ApplyWithAuth()
+        {
+            var visitor = new Visitor
+            {
+                Description = "For testing purpose",
+                Email = "test@test.com",
+                Name = "Test Person",
+                VisitDate = DateTime.Today,
+                User = null,
+                Vehicle = new Vehicle { OwnerName = "Test Owner", PlateNumber = "06AB123", RegistrationNumber = "AB12313", Type = VehicleType.Car }
+            };
+
+            var mockUser = University.GetUser("e101");
+            VisitorController vc = new VisitorController();
+            vc.ControllerContext = new ControllerContext(MockAuthContext(mockUser).Object, new RouteData(), vc);
+            RedirectToRouteResult actionResult = vc.Apply(visitor) as RedirectToRouteResult;
+            Assert.IsNotNull(actionResult);
+            Assert.AreEqual("List", actionResult.RouteValues["action"]);
+            Assert.AreEqual("Visitor", actionResult.RouteValues["controller"]);
+            Assert.AreEqual(1, actionResult.RouteValues["success"]);
+        }
+
+
+
+        [TestMethod]
         public void ApplyWithInvalidModel()
         {
             VisitorController vc = new VisitorController();

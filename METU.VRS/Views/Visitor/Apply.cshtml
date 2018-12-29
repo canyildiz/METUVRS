@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Visitor Application";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    bool Anonymous = !User.Identity.IsAuthenticated;
 }
 
 <h2>Visitor Application</h2>
@@ -10,7 +11,6 @@
 {
     <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
 }
-
 
 @using (Html.BeginForm())
 {
@@ -32,13 +32,18 @@
                 @Html.ValidationMessageFor(model => model.Email, "", htmlAttributes: new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
-            @Html.Label("Visitee's Username", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.User.UID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.User.UID, "", htmlAttributes: new { @class = "text-danger" })
+
+        @if (Anonymous)
+        {
+            <div class="form-group">
+                @Html.Label("Visitee's Username", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.User.UID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.User.UID, "", htmlAttributes: new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
+        }
+
         <div class="form-group">
             @Html.LabelFor(model => model.VisitDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -85,7 +90,7 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create Application" class="btn btn-default" />
+                <input type="submit" value="@(Anonymous ? "Create Application" : "Register Visitor")" class="btn btn-primary" />
             </div>
         </div>
     </div>

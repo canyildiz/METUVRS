@@ -47,6 +47,11 @@ namespace METU.VRS.Controllers
                 {
                     using (DatabaseContext db = GetNewDBContext())
                     {
+                        if (User != null && User.Identity.IsAuthenticated)
+                        {
+                            visitor.User = new User { UID = User.Identity.Name };
+                        }
+
                         StickerApplication application = db.StickerApplications.
                             FirstOrDefault(s => s.Status == StickerApplicationStatus.Active &&
                             s.Vehicle.PlateNumber == visitor.Vehicle.PlateNumber);
@@ -82,13 +87,29 @@ namespace METU.VRS.Controllers
                         visitor.CreateDate = DateTime.Now;
                         visitor.LastModified = DateTime.Now;
                         visitor.EntryDate = null;
-                        visitor.ApproveDate = null;
-                        visitor.Status = VisitorStatus.WaitingForApproval;
+                        if (User != null && User.Identity.IsAuthenticated)
+                        {
+                            visitor.ApproveDate = DateTime.Now;
+                            visitor.Status = VisitorStatus.WaitingForArrival;
+                        }
+                        else
+                        {
+                            visitor.ApproveDate = null;
+                            visitor.Status = VisitorStatus.WaitingForApproval;
+                        }
+
                         visitor.UID = Guid.NewGuid().ToString().ToLower();
                         db.Visitors.Add(visitor);
                         db.SaveChanges();
+                        if (User != null && User.Identity.IsAuthenticated)
+                        {
+                            return RedirectToAction("List", "Visitor", new { success = 1 });
+                        }
+                        else
+                        {
+                            return RedirectToAction("Detail", "Visitor", new { visitor.UID, success = 1 });
+                        }
 
-                        return RedirectToAction("Detail", "Visitor", new { visitor.UID, success = 1 });
                     }
                 }
                 catch (System.Exception ex)
