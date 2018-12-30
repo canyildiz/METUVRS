@@ -96,7 +96,7 @@ namespace METU.VRS.Tests.Controllers
             Assert.IsNotNull(result);
             Assert.AreEqual("Sticker", result.RouteValues["controller"]);
             Assert.AreEqual("Index", result.RouteValues["action"]);
-            Assert.IsNotNull(result.RouteValues["ok_msg"]);
+            Assert.IsNotNull(result.RouteValues["paymentok"]);
 
             //get updated list to be sure application status is not updated
             ViewResult indexResultR = sc.Index() as ViewResult;
@@ -144,10 +144,9 @@ namespace METU.VRS.Tests.Controllers
             RedirectToRouteResult result = controller.Fail(pr) as RedirectToRouteResult;
             Assert.IsNotNull(result);
             Assert.AreEqual("Pay", result.RouteValues["controller"]);
-            Assert.AreEqual("", result.RouteValues["action"]);
+            Assert.AreEqual("Index", result.RouteValues["action"]);
             Assert.AreEqual(application.ID.ToString(), result.RouteValues["Id"]);
-            Assert.IsNotNull(result.RouteValues["err_msg"]);
-            Assert.AreEqual("Test Error Message", result.RouteValues["err_msg"]);
+            Assert.IsNotNull(result.RouteValues["hasError"]);
 
             //get updated list
             ViewResult indexResultR = sc.Index() as ViewResult;

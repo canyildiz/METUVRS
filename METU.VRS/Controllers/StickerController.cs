@@ -75,9 +75,9 @@ namespace METU.VRS.Controllers
             }
 
             StickerApplication application = (detail as ViewResult).Model as StickerApplication;
-            ActionResult newApplication = Apply(application.Clone());
+            RedirectToRouteResult newApplicationResult = CreateNewApplication(application.Clone(), false) as RedirectToRouteResult;
 
-            if (!(newApplication is EmptyResult))
+            if (newApplicationResult.RouteValues["ok"] != null)
             {
                 using (DatabaseContext db = GetNewDBContext())
                 {
@@ -85,9 +85,13 @@ namespace METU.VRS.Controllers
                     application.Status = StickerApplicationStatus.Expired;
                     db.SaveChanges();
                 }
-            }
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index", new { ok = "1" });
+            }
+            else
+            {
+                return newApplicationResult;
+            }
         }
 
 
@@ -104,9 +108,20 @@ namespace METU.VRS.Controllers
 
             if (ModelState.IsValid)
             {
-                using (DatabaseContext db = GetNewDBContext())
-                {
+                return CreateNewApplication(application);
+            }
+            else
+            {
+                return new EmptyResult();
+            }
+        }
 
+        private ActionResult CreateNewApplication(StickerApplication application, bool checkForDuplication = true)
+        {
+            using (DatabaseContext db = GetNewDBContext())
+            {
+                if (checkForDuplication)
+                {
                     int count = db.StickerApplications.Where(a => a.Vehicle.PlateNumber == application.Vehicle.PlateNumber &&
                           (a.User.UID != ((METUPrincipal)User).User.UID ||
                               (a.User.UID == ((METUPrincipal)User).User.UID &&
@@ -119,48 +134,43 @@ namespace METU.VRS.Controllers
                     {
                         return RedirectToAction("Index", new { vehicleAlreadyActive = "1" });
                     }
-
-                    application.ApproveDate = null;
-                    application.CreateDate = DateTime.Now;
-                    application.DeliveryDate = null;
-                    application.LastModified = DateTime.Now;
-
-                    if (((METUPrincipal)User).User.Category.CanApplyOnBehalfOf)
-                    {
-                        application.Status = StickerApplicationStatus.WaitingForPayment;
-                    }
-                    else
-                    {
-                        application.Status = StickerApplicationStatus.WaitingForApproval;
-                    }
-
-                    application.Payment = null;
-
-                    User user = University.GetUser(((METUPrincipal)User).User.UID);
-                    Quota quota = University.GetQuotaForUser(user, University.GetStickerType(application.SelectedType));
-
-                    application.User = user;
-                    application.Quota = quota;
-
-                    if (!user.Category.CanApplyOnBehalfOf)
-                    {
-                        application.Owner = new ApplicationOwner() { Name = user.Name };
-                    }
-
-                    db.Users.Attach(application.User);
-                    db.Quotas.Attach(application.Quota);
-                    db.StickerApplications.Add(application);
-                    db.SaveChanges();
                 }
+
+                application.ApproveDate = null;
+                application.CreateDate = DateTime.Now;
+                application.DeliveryDate = null;
+                application.LastModified = DateTime.Now;
+
+                if (((METUPrincipal)User).User.Category.CanApplyOnBehalfOf)
+                {
+                    application.Status = StickerApplicationStatus.WaitingForPayment;
+                }
+                else
+                {
+                    application.Status = StickerApplicationStatus.WaitingForApproval;
+                }
+
+                application.Payment = null;
+
+                User user = University.GetUser(((METUPrincipal)User).User.UID);
+                Quota quota = University.GetQuotaForUser(user, University.GetStickerType(application.SelectedType));
+
+                application.User = user;
+                application.Quota = quota;
+
+                if (!user.Category.CanApplyOnBehalfOf)
+                {
+                    application.Owner = new ApplicationOwner() { Name = user.Name };
+                }
+
+                db.Users.Attach(application.User);
+                db.Quotas.Attach(application.Quota);
+                db.StickerApplications.Add(application);
+                db.SaveChanges();
 
                 return RedirectToAction("Index", new { ok = "1" });
             }
-            else
-            {
-                return new EmptyResult();
-            }
         }
-
 
         [HttpGet]
         public ActionResult Detail(int Id)

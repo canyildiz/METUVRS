@@ -103,7 +103,7 @@ namespace METU.VRS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Deliver(int Id, Sticker sticker)
         {
-            Trace.WriteLine("GET /Deliver/Deliver");
+            Trace.WriteLine("POST /Deliver/Deliver");
             using (DatabaseContext db = GetNewDBContext())
             {
                 var application = db.StickerApplications

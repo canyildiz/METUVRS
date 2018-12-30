@@ -22,6 +22,7 @@ namespace METU.VRS.Services
         public virtual DbSet<Vehicle> Vehicles { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Sticker> Stickers { get; set; }
+        public virtual DbSet<Visitor> Visitors { get; set; }
 
         public DatabaseContext() : this(new SqlConnection()) { }
 

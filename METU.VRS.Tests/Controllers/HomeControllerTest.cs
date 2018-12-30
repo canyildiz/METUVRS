@@ -12,14 +12,7 @@ namespace METU.VRS.Tests.Controllers
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext context)
         {
-            Migrations.TestDatabase.InitTestDatase();
-            University.Init();
-        }
-
-        [TestInitialize]
-        public void Init()
-        {
-            University.Init();
+            Migrations.TestDatabase.InitTestDatabase();
         }
 
         [TestMethod]

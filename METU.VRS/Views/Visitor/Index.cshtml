@@ -1,8 +1,15 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Visitor Application";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Visitor Application</h2>
 
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h3>Get a Temporary Access</h3>
+        <p>If you need to access to the campus for a limited time. You can make a temporary access application with the button below.</p>
+        <p><a href="@Url.Action("Apply", "Visitor")" class="btn btn-default">Apply for Access&nbsp;<i class="fa fa-ticket"></i></a></p>
+    </div>
+</div>

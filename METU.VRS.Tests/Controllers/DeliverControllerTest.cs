@@ -63,7 +63,7 @@ namespace METU.VRS.Tests.Controllers
             PagedList<StickerApplication> model = result.Model as PagedList<StickerApplication>;
             Assert.AreNotEqual(0, model.Count);
             Assert.AreEqual(0, model.Where(a => a.Status != StickerApplicationStatus.WaitingForDelivery).Count());
-            Assert.AreEqual("Test Student13", model.FirstOrDefault().Owner.Name);
+            Assert.AreEqual("Test Student3", model.FirstOrDefault().Owner.Name);
         }
 
         [TestMethod]
@@ -110,7 +110,7 @@ namespace METU.VRS.Tests.Controllers
 
             //deliver
             StickerApplication stickerApplication = model.FirstOrDefault();
-            controller.Deliver(stickerApplication.ID);
+            controller.Deliver(stickerApplication.ID, new Sticker { SerialNumber = 1 });
 
             //get list
             result = controller.Index("", "", "Test Student13", 1) as ViewResult;
@@ -132,8 +132,32 @@ namespace METU.VRS.Tests.Controllers
             List<StickerApplication> smodel = sresult.Model as List<StickerApplication>;
             Assert.AreNotEqual(0, smodel.Count);
             Assert.AreEqual(StickerApplicationStatus.Active, smodel.FirstOrDefault().Status);
-            Assert.AreEqual(123456, smodel.FirstOrDefault().Sticker.SerialNumber);
+            Assert.AreEqual(1, smodel.FirstOrDefault().Sticker.SerialNumber);
 
+        }
+
+        [TestMethod]
+        public void ApproveWithStickerInUse()
+        {
+            var mockDeliverUser = University.GetUser("o102");
+
+            DeliverController controller = new DeliverController();
+            controller.ControllerContext = new ControllerContext(MockAuthContext(mockDeliverUser).Object, new RouteData(), controller);
+
+            //get list
+            ViewResult result = controller.Index("", "", "Test Student13", 1) as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result.Model, typeof(PagedList<StickerApplication>));
+
+            PagedList<StickerApplication> model = result.Model as PagedList<StickerApplication>;
+            Assert.AreEqual(0, model.Where(a => a.Status != StickerApplicationStatus.WaitingForDelivery).Count());
+            Assert.AreEqual(1, model.Count);
+
+            //deliver
+            StickerApplication stickerApplication = model.FirstOrDefault();
+            RedirectToRouteResult routeResult =   controller.Deliver(stickerApplication.ID, new Sticker { SerialNumber = 12345 }) as RedirectToRouteResult;
+            Assert.IsNotNull(routeResult);
+            Assert.IsNotNull(routeResult.RouteValues["stickerInUse"]);
         }
     }
 }
