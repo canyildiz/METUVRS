@@ -122,6 +122,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\StaffControllerTest.cs" />
     <Compile Include="Controllers\VisitorControllerTest.cs" />
     <Compile Include="Controllers\PayControllerTest.cs" />
     <Compile Include="Controllers\DeliverControllerTest.cs" />
