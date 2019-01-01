@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -168,6 +168,7 @@
     <Compile Include="Controllers\DeliverController.cs" />
     <Compile Include="Controllers\ApproveController.cs" />
     <Compile Include="Controllers\Base\ControllerBase.cs" />
+    <Compile Include="Controllers\InvalidateController.cs" />
     <Compile Include="Controllers\PayController.cs" />
     <Compile Include="Migrations\ConfigurationDefault.cs" />
     <Compile Include="Migrations\TestDatabase.cs" />
@@ -277,6 +278,8 @@
     <Content Include="Views\Pay\Index.cshtml" />
     <Content Include="Views\Visitor\Detail.cshtml" />
     <Content Include="Views\Visitor\List.cshtml" />
+    <Content Include="Views\Staff\ListVisitors.cshtml" />
+    <Content Include="Views\Invalidate\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -133,7 +133,8 @@
             Quota q21 = new Quota() { UID = "q21", Term = academicyear2018, Division = MUH, StickerFee = 100, TotalQuota = 100, Type = st13 };
             Quota q22 = new Quota() { UID = "q22", Term = academicyear2017, Division = IAM, StickerFee = 300, TotalQuota = 2, Type = st12 };
 
-            context.Quotas.AddOrUpdate(a => a.UID, new Quota[] { q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22 });
+            //context.Quotas.AddOrUpdate(a => a.UID, new Quota[] { q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22 });
+            context.Quotas.AddOrUpdate(a => a.UID, new Quota[] { q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q13, q14, q15, q18, q19, q21 });
 
             Vehicle ve100 = new Vehicle { OwnerName = e100.Name, PlateNumber = "06AA100", RegistrationNumber = "AA100000", Type = VehicleType.Car };
             Vehicle ve200 = new Vehicle { OwnerName = e200.Name, PlateNumber = "06AA200", RegistrationNumber = "AA200000", Type = VehicleType.Car };
