@@ -1,6 +1,7 @@
 ﻿using METU.VRS.Models;
 using METU.VRS.Services;
 using METU.VRS.Services.Abstract;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -72,17 +73,6 @@ namespace METU.VRS.Controllers.Static
             return stickerTerms.FirstOrDefault(s => s.Type == termType);
         }
 
-        public static Quota GetQuotaForTerm(StickerTerm term, BranchAffiliate division)
-        {
-            using (DatabaseContext db = new DatabaseContext())
-            {
-                return db.Quotas
-                         .Where(q => q.Term.ID == term.ID && (q.Division == null || q.Division.UID == division.UID))
-                         .OrderByDescending(q => q.Division.ID)
-                         .FirstOrDefault();
-            }
-        }
-
         public static Quota GetQuotaForUser(User user, StickerType stickerType)
         {
             BranchAffiliate division = user.Division;
@@ -149,6 +139,136 @@ namespace METU.VRS.Controllers.Static
 
             return userCache[UID];
         }
+
+        public static IPagedList<Visitor> GetVisitorsByKeyword(string sortOrder, string currentFilter, string searchString, int? page, VisitorStatus? visitorStatus, User user = null)
+        {
+            IQueryable<Visitor> visitors = null;
+
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                visitors = db.Visitors
+                    .AsNoTracking()
+                    .Include(a => a.Vehicle)
+                    .Include(a => a.User);
+
+                if (null != user)
+                {
+                    visitors = visitors.Where(a => a.User.UID == user.UID);
+                }
+
+                if (visitorStatus.HasValue)
+                {
+                    visitors = visitors.Where(a => a.Status == visitorStatus);
+                }
+
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    visitors = visitors.Where(a =>
+                    a.Name.Equals(searchString)
+                    || a.Email.Contains(searchString)
+                    || a.Description.Contains(searchString)
+                    || a.Vehicle.PlateNumber.Contains(searchString)
+                    || a.Vehicle.RegistrationNumber.Contains(searchString)
+                    || a.Vehicle.OwnerName.Contains(searchString));
+                }
+
+                switch (sortOrder)
+                {
+                    case "name_desc":
+                        visitors = visitors.OrderByDescending(v => v.Name);
+                        break;
+                    case "Date":
+                        visitors = visitors.OrderBy(v => v.VisitDate);
+                        break;
+                    case "date_desc":
+                        visitors = visitors.OrderByDescending(v => v.VisitDate);
+                        break;
+                    case "Plate":
+                        visitors = visitors.OrderBy(v => v.Vehicle.PlateNumber);
+                        break;
+                    case "plate_desc":
+                        visitors = visitors.OrderByDescending(v => v.Vehicle.PlateNumber);
+                        break;
+                    default:
+                        visitors = visitors.OrderBy(v => v.Status).OrderBy(v => v.LastModified);
+                        break;
+                }
+
+                int pageSize = 10;
+                int pageNumber = (page ?? 1);
+                pageNumber = pageNumber > 0 ? pageNumber : 1;
+                return visitors.ToPagedList(pageNumber, pageSize);
+            }
+        }
+        public static IPagedList<StickerApplication> GetStickerApplicationsByKeyword(string sortOrder, string currentFilter, string searchString, int? page, StickerApplicationStatus? applicationStatus, User user = null, BranchAffiliate division = null)
+        {
+            IQueryable<StickerApplication> applications = null;
+
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                applications = db.StickerApplications
+                    .AsNoTracking()
+                    .Include(a => a.Vehicle)
+                    .Include(a => a.Owner)
+                    .Include(a => a.User.Category)
+                    .Include(a => a.User.Division)
+                    .Include(a => a.Quota.Type);
+
+                if (null != user)
+                {
+                    applications = applications.Where(a => a.User == user);
+                }
+
+                if (null != applicationStatus)
+                {
+                    applications = applications.Where(a => a.Status == applicationStatus);
+                }
+
+                if (null != division)
+                {
+                    applications = applications.Where(a => a.User.Division.ID == division.ID);
+                }
+
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    applications = applications.Where(a =>
+                    a.User.Name.Contains(searchString)
+                    || a.User.UID.Equals(searchString)
+                    || a.Owner.Name.Contains(searchString)
+                    || a.Vehicle.PlateNumber.Contains(searchString)
+                    || a.Vehicle.RegistrationNumber.Contains(searchString)
+                    || a.Vehicle.OwnerName.Contains(searchString));
+                }
+
+                switch (sortOrder)
+                {
+                    case "name_desc":
+                        applications = applications.OrderByDescending(s => s.Owner.Name);
+                        break;
+                    case "Date":
+                        applications = applications.OrderBy(s => s.LastModified);
+                        break;
+                    case "date_desc":
+                        applications = applications.OrderByDescending(s => s.LastModified);
+                        break;
+                    case "Plate":
+                        applications = applications.OrderBy(s => s.Vehicle.PlateNumber);
+                        break;
+                    case "plate_desc":
+                        applications = applications.OrderByDescending(s => s.Vehicle.PlateNumber);
+                        break;
+                    default:
+                        applications = applications.OrderBy(s => s.Owner.Name);
+                        break;
+                }
+
+                int pageSize = 10;
+                int pageNumber = (page ?? 1);
+                pageNumber = pageNumber > 0 ? pageNumber : 1;
+                return applications.ToPagedList(pageNumber, pageSize);
+            }
+        }
+
 
         public static User TryLogin(string username, string password)
         {

@@ -36,58 +36,8 @@ namespace METU.VRS.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            IQueryable<StickerApplication> applications = null;
-
-            using (DatabaseContext db = GetNewDBContext())
-            {
-                applications = db.StickerApplications
-                    .AsNoTracking()
-                    .Include(a => a.Vehicle)
-                    .Include(a => a.Owner)
-                    .Include(a => a.User.Category)
-                    .Include(a => a.User.Division)
-                    .Include(a => a.Quota.Type)
-                    .Where(a => a.Status == StickerApplicationStatus.WaitingForApproval
-                    && a.User.Division.ID == ((METUPrincipal)User).User.Division.ID);
-
-
-                if (!string.IsNullOrEmpty(searchString))
-                {
-                    applications = applications.Where(a =>
-                    a.User.Name.Contains(searchString)
-                    || a.User.UID.Equals(searchString)
-                    || a.Owner.Name.Contains(searchString)
-                    || a.Vehicle.PlateNumber.Contains(searchString)
-                    || a.Vehicle.RegistrationNumber.Contains(searchString)
-                    || a.Vehicle.OwnerName.Contains(searchString));
-                }
-
-                switch (sortOrder)
-                {
-                    case "name_desc":
-                        applications = applications.OrderByDescending(s => s.Owner.Name);
-                        break;
-                    case "Date":
-                        applications = applications.OrderBy(s => s.LastModified);
-                        break;
-                    case "date_desc":
-                        applications = applications.OrderByDescending(s => s.LastModified);
-                        break;
-                    case "Plate":
-                        applications = applications.OrderBy(s => s.Vehicle.PlateNumber);
-                        break;
-                    case "plate_desc":
-                        applications = applications.OrderByDescending(s => s.Vehicle.PlateNumber);
-                        break;
-                    default:
-                        applications = applications.OrderBy(s => s.Owner.Name);
-                        break;
-                }
-
-                int pageSize = 10;
-                int pageNumber = (page ?? 1);
-                return View(applications.ToPagedList(pageNumber, pageSize));
-            }
+            IPagedList<StickerApplication> approveApplications = University.GetStickerApplicationsByKeyword(sortOrder, currentFilter, searchString, page, StickerApplicationStatus.WaitingForApproval, division: ((METUPrincipal)User).User.Division);
+            return View(approveApplications);
         }
 
         [HttpGet]

@@ -8,6 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - METU VRS</title>
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;subset=latin-ext" rel="stylesheet">
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/fontawesome")
@@ -42,11 +43,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("FAQ", "FAQ", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        if (User.IsInRole("approval_user") || User.IsInRole("delivery_user"))
+                        if (User.IsInRole("approval_user") || User.IsInRole("delivery_user") || User.IsInRole("security_officer"))
                         {
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrator Menu <span class="caret"></span></a>
@@ -60,15 +60,10 @@
                                         <li><a href="@Url.Action("Index", "Deliver")">Deliver Stickers <i class="fa fa-file-text-o"></i></a></li>
                                         <li><a href="@Url.Action("Index", "Invalidate")">Invalidate Stickers <i class="fa fa-remove"></i></a></li>
                                     }
-                                </ul>
-                            </li>
-                        }
-                        else if (User.IsInRole("security_officer"))
-                        {
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Security Staff Menu <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="@Url.Action("ListVisitors", "Staff")">List Approved Visitors <i class="fa fa-check-circle"></i></a></li>
+                                    else if (User.IsInRole("security_officer"))
+                                    {
+                                        <li><a href="@Url.Action("ListVisitors", "Staff")">Approved Visitors <i class="fa fa-users"></i></a></li>
+                                    }
                                 </ul>
                             </li>
                         }

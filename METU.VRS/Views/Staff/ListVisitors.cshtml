@@ -4,7 +4,7 @@
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "List Approved Visitors";
+    ViewBag.Title = "Approved Visitors";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -29,10 +29,7 @@ else if (Request.Params["error"] != null && Request.UrlReferrer?.Host == Request
 @using (Html.BeginForm("ListVisitors", "Staff", FormMethod.Get))
 {
     <div class="row">
-        <div class="col-sm-1 col-xs-12">
-            &nbsp;
-        </div>
-        <div class="col-sm-4  col-xs-12 col-xs-offset-0">
+        <div class="col-sm-4 col-sm-offset-8 col-xs-12 col-xs-offset-0">
             <div class="input-group">
                 @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @placeholder = "Quick Search", @class = "form-control no-limit" })
                 <span class="input-group-btn">

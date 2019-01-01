@@ -43,7 +43,7 @@ All test accounts’ passwords are equal to its login id.
 | o100 | Test Officer1 | Directorate of Student Affairs | Administrative | Application |
 | o101 | Test Approval Officer | Graduate School of Informatics | Administrative | Approval |
 | o102 | Test Delivery Officer | Office of Domestic Services | Administrative | Delivery |
-| o103 | Test Security Officer | Office of Domestic Services | Administrative | - |
+| o103 | Test Security Officer | Office of Domestic Services | Administrative | Visitor Control |
 | isbank | Test Affiliate1 | Türkiye İş Bankası | Affiliate | Affiliate Application |
 | burgerking | Test Affiliate2 | BurgerKing | Affiliate | Affiliate Application |
 | aselsan | Test Affiliate3 | ASELSAN | Affiliate | Affiliate Application | 
