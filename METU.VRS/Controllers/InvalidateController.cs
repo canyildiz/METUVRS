@@ -1,7 +1,6 @@
-﻿using METU.VRS.Models;
+﻿using METU.VRS.Controllers.Static;
+using METU.VRS.Models;
 using METU.VRS.Services;
-using METU.VRS.UI;
-using PagedList;
 using System;
 using System.Data.Entity;
 using System.Diagnostics;
@@ -30,7 +29,7 @@ namespace METU.VRS.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var res = ListApplications(sortOrder, currentFilter, searchString, page, StickerApplicationStatus.Active);
+            var res = University.GetStickerApplicationsByKeyword(sortOrder, currentFilter, searchString, page, StickerApplicationStatus.Active);
             return View(res);
         }
 

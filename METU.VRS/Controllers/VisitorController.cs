@@ -1,5 +1,7 @@
-﻿using METU.VRS.Models;
+﻿using METU.VRS.Controllers.Static;
+using METU.VRS.Models;
 using METU.VRS.Services;
+using METU.VRS.UI;
 using PagedList;
 using System;
 using System.Data.Entity;
@@ -169,55 +171,10 @@ namespace METU.VRS.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            IQueryable<Visitor> visitors = null;
-
-            using (DatabaseContext db = GetNewDBContext())
-            {
-                visitors = db.Visitors
-                    .AsNoTracking()
-                    .Include(a => a.Vehicle)
-                    .Include(a => a.User)
-                    .Where(a => a.User.UID == User.Identity.Name);
-
-
-                if (!string.IsNullOrEmpty(searchString))
-                {
-                    visitors = visitors.Where(a =>
-                    a.Name.Equals(searchString)
-                    || a.Email.Contains(searchString)
-                    || a.Description.Contains(searchString)
-                    || a.Vehicle.PlateNumber.Contains(searchString)
-                    || a.Vehicle.RegistrationNumber.Contains(searchString)
-                    || a.Vehicle.OwnerName.Contains(searchString));
-                }
-
-                switch (sortOrder)
-                {
-                    case "name_desc":
-                        visitors = visitors.OrderByDescending(v => v.Name);
-                        break;
-                    case "Date":
-                        visitors = visitors.OrderBy(v => v.VisitDate);
-                        break;
-                    case "date_desc":
-                        visitors = visitors.OrderByDescending(v => v.VisitDate);
-                        break;
-                    case "Plate":
-                        visitors = visitors.OrderBy(v => v.Vehicle.PlateNumber);
-                        break;
-                    case "plate_desc":
-                        visitors = visitors.OrderByDescending(v => v.Vehicle.PlateNumber);
-                        break;
-                    default:
-                        visitors = visitors.OrderBy(v => v.Status).OrderBy(v => v.LastModified);
-                        break;
-                }
-
-                int pageSize = 10;
-                int pageNumber = (page ?? 1);
-                return View(visitors.ToPagedList(pageNumber, pageSize));
-            }
+            IPagedList<Visitor> visitorApplications = University.GetVisitorsByKeyword(sortOrder, currentFilter, searchString, page, null, user: ((METUPrincipal)User).User);
+            return View(visitorApplications);
         }
+
 
         [HttpGet]
         public ActionResult Approve(int Id)

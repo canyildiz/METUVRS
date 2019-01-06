@@ -1,14 +1,11 @@
-﻿using METU.VRS.Models;
-using METU.VRS.Models.CT;
+﻿using METU.VRS.Controllers.Static;
+using METU.VRS.Models;
 using METU.VRS.Services;
-using METU.VRS.UI;
+using PagedList;
 using System;
-using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
-using PagedList;
-
 
 namespace METU.VRS.Controllers
 {
@@ -25,6 +22,7 @@ namespace METU.VRS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "security_officer")]
         public ActionResult ListVisitors(string sortOrder, string currentFilter, string searchString, int? page)
         {
             Trace.WriteLine("GET /Staff/ListVisitors");
@@ -38,20 +36,23 @@ namespace METU.VRS.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            IPagedList<StickerApplication> visitorApplications = ListApplications(sortOrder, currentFilter, searchString, page, StickerApplicationStatus.WaitingForApproval);
-
+            IPagedList<Visitor> visitorApplications = University.GetVisitorsByKeyword(sortOrder, currentFilter, searchString, page, VisitorStatus.WaitingForArrival);
             return View(visitorApplications);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "security_officer")]
         public ActionResult VisitorArrived(int id)
         {
+            Trace.WriteLine("GET /Staff/VisitorArrived");
+
             using (DatabaseContext db = GetNewDBContext())
             {
                 Visitor visitor = db.Visitors
                     .Include("Vehicle")
                     .Include("User")
                     .FirstOrDefault(v => v.ID == id);
-                if(null != visitor)
+                if (null != visitor)
                 {
                     visitor.Status = VisitorStatus.Arrived;
                     visitor.LastModified = DateTime.Now;
@@ -61,7 +62,7 @@ namespace METU.VRS.Controllers
                     }
                     catch (Exception ex)
                     {
-                        return RedirectToAction("ListVisitors", new { err = "Visitor not updated: [" + ex.Message + "]"});
+                        return RedirectToAction("ListVisitors", new { error = "Visitor not updated: [" + ex.Message + "]" });
                     }
                 }
                 else
